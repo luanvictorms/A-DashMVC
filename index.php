@@ -21,6 +21,11 @@ switch($url){
         }
     break;
 
+    //Adicionar novo tipo de serviço
+    case '/usuario/login/adicionarNovoTipoServico':
+        UserController::addNewTypeAttendance();
+    break;
+
     case '/usuario/login/adicionarCusto':
         UserController::addCost();
     break;

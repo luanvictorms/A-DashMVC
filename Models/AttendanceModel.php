@@ -14,4 +14,14 @@ class AttendanceModel
 
         return ($obj) ? $obj : new AttendanceModel();
     }
+
+    public function saveAttendance($nomeServico, $preco)
+    {
+        include_once 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->insertAttendance($nomeServico, $preco);
+
+    }
 }

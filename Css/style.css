@@ -284,6 +284,11 @@ tr td:last-child {
     display: flex;
 }
 
+#modalNewTypeAttendance:checked + .modal {
+    display: flex;
+}
+
+
 .modal{
     display: none;
     position: fixed;

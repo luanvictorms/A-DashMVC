@@ -170,4 +170,16 @@ class UserDAO
         $stmt->execute();
     }
 
+    public function insertAttendance($nomeServiço, $preco)
+    {
+        $sql = "INSERT INTO attendance (attendance_name, attendance_price) VALUES (?,?)";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bindParam(1, $nomeServiço);
+        $stmt->bindParam(2, $preco);
+
+        $stmt->execute();
+    }
+
 }

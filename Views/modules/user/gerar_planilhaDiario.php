@@ -8,6 +8,10 @@
 </head>
 <body>
     <?php
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+        
         $cost = 0;
         $gain = 0;
         $addGanho = 0;
@@ -29,6 +33,7 @@
                     ON wk.worker_id = atc.worker_id
                 INNER JOIN attendance att
                     ON att.attendance_id = atc.attendance_id
+                WHERE atc.attendance_date = $hoje
                 ORDER BY atc.attendance_calls_id DESC";
 
         $stmt = $conexao->prepare($sql);
@@ -36,7 +41,7 @@
         $resultadoChamadaAtendimento = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Custos
-        $sql = "SELECT * FROM cost ORDER BY cost_date DESC";
+        $sql = "SELECT * FROM cost WHERE cost_date = $hoje";
         $stmt = $conexao->prepare($sql);
         $stmt->execute();
         $resultadoCustos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -49,11 +54,9 @@
 
         //_________________________________________________________________________________________________________________________________________________________
         //Cabeçalho
-        date_default_timezone_set('America/Sao_Paulo');
-        $hoje = date('Y/m/d');
-        $hoje = str_replace('/', "-", $hoje);
+        
 
-        $arquivo = $hoje . "relatorio_Mensal.xls";
+        $arquivo = $hoje . "_relatorio_Diario.xls";
         $html = '';
         $html .= '<table border="1">';
         $html .= '<th>';
@@ -79,13 +82,13 @@
                     $html .= '<td><b>Custo Total</b></td>';
                 $html .= '</tr>';
 
-                //Somando os custos
                 if(isset($resultadoCustos)){
+                    //Somando os custos
                     foreach($resultadoCustos as $custo){
                         $cost = $cost + $custo['cost_value'];
                         $totalCost = $cost;
                     }
-    
+
                     //Mostrando tudo o que tem da tabela de custos
                     foreach ($resultadoCustos as $custo){
                         $html .= '<tr>';
@@ -98,9 +101,13 @@
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
-                        $html .= '<td>'.'-R$'.$totalCost.'</td>';
+                        if(isset($totalCost)){
+                            $html .= '<td>'.'-R$'.$totalCost.'</td>';
+                        }
+                        
                     $html .= '</tr>';
                 }
+            
         $html .= '<br>';
         $html .= '<br>';
 
@@ -135,7 +142,9 @@
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
-                        $html .= '<td>'.'R$'.$totalGain.'</td>';
+                        if(isset($totalGain)){
+                            $html .= '<td>'.'R$'.$totalGain.'</td>';
+                        }
                     $html .= '</tr>';
                 }
                 
@@ -195,7 +204,7 @@
                         $html .= '</tr>';
                     }
                 }
-                
+
         header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         header ("Last-Modified:" . gmdate("D,d M YH:i:s") . " GMT");
         header ("Cache-Control: no-cache, must-revalidade");

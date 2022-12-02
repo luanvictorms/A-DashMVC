@@ -296,6 +296,39 @@
                                                 <?php endforeach; ?>
                                             </tbody>
                                     </table>
+
+                                    <!--Modal de adicionar um novo serviço-->
+                                    <label for="modalNewTypeAttendance" class="abrirModal btn btn-dark" style="margin-top: 140px">
+                                        <span class="las la-plus-circle"></span>
+                                        <span>Adicionar Serviços</span>
+                                    </label>
+                                    <input type="checkbox" class="checkboxModal" id="modalNewTypeAttendance">
+
+                                    <div class="modal">
+                                        <label for="modalNewTypeAttendance" class="fecharModal"><span class="las la-times-circle"></label>
+                                        
+                                        <div class="conteudoModal" style="text-align: center;">
+                                            <h2 style="text-align:center; margin-top:10px">Adicionar Novo Tipo de Serviço</h2>
+                                            <form action="/usuario/login/adicionarNovoTipoServico" method="POST">
+                                            <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                                <div class="input-group mb-3">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Nome do Serviço</label>
+                                                    <input type="text" id="inputGroupSelect01" class="form-control" name="nome" required>
+                                                </div>
+
+                                                <div class="input-group mb-3">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Preço do Serviço: R$</label>
+                                                    <input type="number" id="inputGroupSelect01" class="form-control" name="preco" required>
+                                                </div>
+                                                
+                                                <input type="submit" class="btn btn-dark" value="Adicionar Novo Serviço">
+                                            </div>
+                                            
+                                            </form>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -576,9 +609,12 @@
                                     </div>
                                     
                                     <div class="card-body">
-                                        <div class="customer" style="text-align: center">
+                                        <div class="customer" style="text-align: center;">
                                             <div>
-                                                <label class="btn btn-dark"><a href='/Views/modules/user/gerar_planilha.php' style="text-decoration: none;">Gerar Relatorio Excel</a></label>
+                                                <label class="btn btn-dark"><a href='/Views/modules/user/gerar_planilha.php' style="text-decoration: none;">Gerar Relatorio Excel Mensal</a></label>
+                                            </div>
+                                            <div style="margin-top: 20px;">
+                                                <label class="btn btn-dark"><a href='/Views/modules/user/gerar_planilhaDiario.php' style="text-decoration: none;">Gerar Relatorio Excel Diario</a></label>
                                             </div>
                                         </div>
                                     </div>

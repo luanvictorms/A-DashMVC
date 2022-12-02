@@ -24,6 +24,15 @@ class UserController
         header("Location: /usuario/login");
     }
 
+    public static function addNewTypeAttendance(){
+        include_once 'Models/AttendanceModel.php';
+
+        $service = new AttendanceModel();
+
+        $service->saveAttendance($_POST['nome'], $_POST['preco']);
+        header("Location: /usuario/login");
+    }
+
     public static function addAttendance(){
         include_once 'Models/AttendanceCallsModel.php';
 
