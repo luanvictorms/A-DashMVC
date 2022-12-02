@@ -33,9 +33,8 @@ Adicione notas adicionais sobre como implantar isso em um sistema ativo
 
 Mencione as ferramentas que você usou para criar seu projeto
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - O framework web usado
-* [Maven](https://maven.apache.org/) - Gerente de Dependência
-* [ROME](https://rometools.github.io/rome/) - Usada para gerar RSS
+* [PHP8](https://www.php.net/releases/8.0/en.php) - Linguagem de Prog
+* [MYSQL](https://www.mysql.com/) - DB
 
 ## 🖇️ Colaborando
 
