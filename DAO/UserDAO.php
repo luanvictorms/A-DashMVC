@@ -182,4 +182,34 @@ class UserDAO
         $stmt->execute();
     }
 
+    public function deleteAttendance(int $id)
+    {
+        $sql = "DELETE FROM attendance_calls WHERE attendance_calls_id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+    }
+
+    public function deleteCost(int $id)
+    {
+        $sql = "DELETE FROM cost WHERE cost_id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+    }
+
+    public function deleteClient(int $id)
+    {
+        $sql = "DELETE FROM client WHERE client_id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+    }
+
 }

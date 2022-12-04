@@ -128,5 +128,38 @@ class UserController
         //Inclui nossa view de dashboard.
         include_once 'Views/modules/user/Dashboard.php';
     }
+
+    public static function deleteAttendance()
+    {
+        include 'Models/AttendanceCallsModel.php';
+
+        $model = new AttendanceCallsModel();
+
+        $model->delete( (int) $_GET['id']); 
+
+        header("Location: /usuario/login");
+    }
+
+    public static function deleteCost()
+    {
+        include 'Models/CostModel.php';
+
+        $model = new CostModel();
+
+        $model->delete( (int) $_GET['id']); 
+
+        header("Location: /usuario/login");
+    }
+
+    public static function deleteClient()
+    {
+        include 'Models/ClientModel.php';
+
+        $model = new ClientModel();
+
+        $model->delete( (int) $_GET['id']); 
+
+        header("Location: /usuario/login");
+    }
     
 }

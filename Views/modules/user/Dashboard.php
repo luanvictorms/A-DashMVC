@@ -273,6 +273,8 @@
                                                 <td class="dark-table">Valor</td>
                                                 <td class="dark-table">Status</td>
                                                 <td class="dark-table">Data</td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                         </thead>
                                             <tbody>
@@ -292,6 +294,8 @@
                                                             <td>
                                                                 <?php echo $row['attendance_date']; ?>
                                                             </td>
+                                                            <!--<td><a href="/usuario/atendimento/update?id=">Editar</a></td>-->
+                                                            <td><a style="text-decoration: none" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>" class="las la-trash"></a></td>
                                                         </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -394,11 +398,12 @@
                                                 <td class="dark-table">Endereço</td>
                                                 <td class="dark-table">Celular</td>
                                                 <td class="dark-table">Qtd. Atendimentos</td>
+                                                <td class="dark-table"></td>
                                             </tr>
                                         </thead>
                                             <tbody>
                                                 <?php foreach($clientModel->clientRows as $rowClientes): ?>
-                                                        <tr>
+                                                        <tr style="text-align:center">
                                                             <td>
                                                                 <?php echo $rowClientes['client_name']; ?>
                                                             </td>
@@ -414,13 +419,19 @@
                                                                         $addAtendimento = $addAtendimento + 1;
                                                                         
                                                                     }
-                                                                        
                                                                     ?>
-                                                                    
                                                                 <?php endforeach; ?>
                                                                 <?php echo $addAtendimento; ?>
-                                                                <?php $addAtendimento = 0; ?>
+                                                                
                                                             </td>
+                                                            <td>
+                                                                <?php if($addAtendimento == 0): ?>
+                                                                    
+                                                                        <a style="text-decoration: none" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>" class="las la-trash"></a>
+                                                                    
+                                                                <?php endif; ?>
+                                                            </td>
+                                                            <?php $addAtendimento = 0; ?>
                                                         </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -458,7 +469,7 @@
                 <div class="projects">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Custo Diario</h3>
+                            <h3>Custo Administrativo Diario</h3>
 
                             <label for="modalCustoDiario" class="btn btn-dark">Ver Custos<span class="las la-arrow-right"></span></label>
                             <input type="checkbox" class="checkboxModal" id="modalCustoDiario">
@@ -467,7 +478,7 @@
                                 <label for="modalCustoDiario" class="fecharModal"><span class="las la-times-circle"></label>
                                 
                                 <div class="conteudoModal" style="text-align: center;">
-                                    <h2 style="text-align:center; margin-top:10px">Todos os Custos</h2>
+                                    <h2 style="text-align:center; margin-top:10px">Todos os Custos Administrativos</h2>
 
                                     <table width="100%" style="margin-top: 80px">
                                         <thead>
@@ -475,6 +486,7 @@
                                                 <td class="dark-table">Valor</td>
                                                 <td class="dark-table">Motivo</td>
                                                 <td class="dark-table">Data</td>
+                                                <td></td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -488,6 +500,9 @@
                                                         </td>
                                                         <td>
                                                             <?php echo $row['cost_date']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <a style="text-decoration: none" href="/usuario/custo/delete?id=<?= $row['cost_id']?>" class="las la-trash"></a>
                                                         </td>
                                                     </tr>
                                             <?php endforeach; ?>
@@ -589,7 +604,12 @@
                                                                         }  
                                                                         ?>
                                                                     <?php endforeach; ?>
-                                                                    <?php echo "R$" . "$addGanho,00"; ?>
+                                                                    <?php if($obj['worker_name'] == 'Vitor'): ?>
+                                                                        <?php $addGanho = $addGanho * 0.45; ?>
+                                                                        <?php echo "R$" . "$addGanho,00"; ?>
+                                                                    <?php else: ?>
+                                                                        <?php echo "R$" . "$addGanho,00"; ?>
+                                                                    <?php endif; ?>
                                                                     <?php $addGanho = 0; ?>
                                                                 </td>
                                                             </tr>

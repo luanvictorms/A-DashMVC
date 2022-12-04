@@ -25,4 +25,13 @@ class CostModel
         $dao->insertCost($cost_value, $cost_reason, $cost_date, $user_id);
 
     }
+
+    public function delete(int $id)
+    {
+        include 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->deleteCost($id);
+    }
 }

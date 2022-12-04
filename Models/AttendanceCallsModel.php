@@ -25,4 +25,13 @@ class AttendanceCallsModel
         $dao->insertAttendanceCall($atendente, $data, $servico, $valor);
 
     }
+
+    public function delete(int $id)
+    {
+        include 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->deleteAttendance($id);
+    }
 }

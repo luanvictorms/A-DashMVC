@@ -38,6 +38,20 @@ switch($url){
         UserController::addClient();
     break;
 
+    case '/usuario/atendimento/delete':
+        UserController::deleteAttendance();
+    break;
+
+    case '/usuario/custo/delete':
+        UserController::deleteCost();
+    break;
+
+    case '/usuario/clientes/delete':
+        UserController::deleteClient();
+    break;
+
+    
+
     /*
     case '/pessoa':
         PessoaController::index();

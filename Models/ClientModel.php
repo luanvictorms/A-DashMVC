@@ -24,4 +24,13 @@ class ClientModel
         $dao->insertClient($client_name, $client_address, $client_phone);
 
     }
+
+    public function delete(int $id)
+    {
+        include 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->deleteClient($id);
+    }
 }
