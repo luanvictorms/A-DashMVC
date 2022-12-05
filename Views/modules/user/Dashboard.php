@@ -85,7 +85,7 @@
 
                 <div class="card-single">
                     <div>
-                        <h1>R$<?php echo $costModel->totalCost; ?></h1>
+                        <h1>R$-<?php echo $costModel->totalCost; ?></h1>
                         <span>Custos Administrativos</span>
                     </div>
                     <div>
@@ -168,6 +168,17 @@
                                                 <option value="<?php echo $obj['attendance_id'] ?>"><?php echo $obj['attendance_name'] ?></option>
                                             <?php endforeach; ?>
 
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="inputGroupSelect05">Desconto</label>
+                                        <select class="form-select" id="inputGroupSelect05" name="desconto" required>
+                                            <option value="0">Sem Desconto</option>    
+                                            <option value="0.05">5%</option>
+                                            <option value="0.1">10%</option>
+                                            <option value="0.15">15%</option>
+                                            <option value="0.20">20%</option>
                                         </select>
                                     </div>
 
@@ -292,7 +303,11 @@
                                                             <td>
                                                                 <?php echo $row['worker_name']; ?>
                                                             </td>
-                                                            <td><?php echo "R$" . "{$row['attendance_price']},00"; ?></td>
+                                                            <?php 
+                                                                $discount = $row['attendance_discount'] * $row['attendance_price'];
+                                                                $realPrice = $row['attendance_price'] - $discount;
+                                                            ?>
+                                                            <td><?php echo "R$" . "{$realPrice}"; ?></td>
                                                             <td>
                                                                 <span class="status green"></span>
                                                                 Pago
@@ -367,7 +382,11 @@
                                                     <td>
                                                         <?php echo $row['worker_name']; ?>
                                                     </td>
-                                                    <td><?php echo "R$" . "{$row['attendance_price']},00"; ?></td>
+                                                    <?php 
+                                                        $discount = $row['attendance_discount'] * $row['attendance_price'];
+                                                        $realPrice = $row['attendance_price'] - $discount;
+                                                    ?>
+                                                    <td><?php echo "R$" . "{$realPrice}"; ?></td>
                                                     <td>
                                                         <span class="status green"></span>
                                                         Pago
@@ -534,7 +553,7 @@
                                         <?php if($hoje <= $row['cost_date']): ?>
                                             <tr>
                                                 <td>
-                                                    <?php echo "R$" . "{$row['cost_value']},00"; ?>
+                                                    <?php echo "R$-" . "{$row['cost_value']},00"; ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $row['cost_reason']; ?>
@@ -607,16 +626,22 @@
 
                                                                     <?php foreach($attendanceModel->attendanceRows as $attendanceCall): ?>
                                                                         <?php if($attendanceCall['worker_id'] == $obj['worker_id']){
-                                                                            $addGanho = $addGanho + $attendanceCall['attendance_price'];
-                                                                            $arrayGanho[] = ['ganho' => $addGanho, 'nome' => $obj['worker_name'], 'id' => $obj['worker_id']];
+                                                                            if(!empty($attendanceCall['attendance_discount'])){
+                                                                                $discount = $attendanceCall['attendance_discount'] * $attendanceCall['attendance_price'];
+                                                                                $realPrice = $attendanceCall['attendance_price'] - $discount;
+                                                                                $addGanho = $addGanho + $realPrice;
+                                                                            } else {
+                                                                                $addGanho = $addGanho + $attendanceCall['attendance_price'];
+                                                                                $arrayGanho[] = ['ganho' => $addGanho, 'nome' => $obj['worker_name'], 'id' => $obj['worker_id']];
+                                                                            }
                                                                         }  
                                                                         ?>
                                                                     <?php endforeach; ?>
                                                                     <?php if($obj['worker_name'] == 'Vitor'): ?>
                                                                         <?php $addGanho = $addGanho * 0.45; ?>
-                                                                        <?php echo "R$" . "$addGanho,00"; ?>
+                                                                        <?php echo "R$" . "$addGanho"; ?>
                                                                     <?php else: ?>
-                                                                        <?php echo "R$" . "$addGanho,00"; ?>
+                                                                        <?php echo "R$" . "$addGanho"; ?>
                                                                     <?php endif; ?>
                                                                     <?php $addGanho = 0; ?>
                                                                 </td>

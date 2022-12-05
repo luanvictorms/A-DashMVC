@@ -12,7 +12,7 @@ class UserController
 
             include_once 'Models/AttendanceCallsModel.php';
             $cost = new AttendanceCallsModel();
-            $cost->saveAttendanceCall($_POST['atendente'], $_POST['data'], $_POST['servico'], $_POST['cliente']);
+            $cost->saveAttendanceCall($_POST['atendente'], $_POST['data'], $_POST['servico'], $_POST['cliente'], $_POST['desconto']);
             header("Location: /usuario/login");
 
         } else if(isset($_POST['custoAction'])){
@@ -99,7 +99,14 @@ class UserController
         $cost = 0;
         $attendanceModel->attendanceRows = $attendanceModel->getAllAttendanceCalls();
         foreach( $attendanceModel->attendanceRows as $register){
-            $cost = $cost + $register['attendance_price'];
+            if(!empty($register['attendance_discount'])){
+
+                $discount = $register['attendance_discount'] * $register['attendance_price'];
+                $realPrice = $register['attendance_price'] - $discount;
+                $cost = $cost + $realPrice;
+            } else {
+                $cost = $cost + $register['attendance_price'];
+            }
             $attendanceModel->attendanceProfit = $cost;
         }
 

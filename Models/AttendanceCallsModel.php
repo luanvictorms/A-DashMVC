@@ -16,13 +16,13 @@ class AttendanceCallsModel
         return ($obj) ? $obj : new AttendanceCallsModel();
     }
 
-    public function saveAttendanceCall($atendente, $data, $servico, $valor)
+    public function saveAttendanceCall($atendente, $data, $servico, $cliente, $desconto)
     {
         include 'DAO/UserDAO.php';
 
         $dao = new UserDAO();
 
-        $dao->insertAttendanceCall($atendente, $data, $servico, $valor);
+        $dao->insertAttendanceCall($atendente, $data, $servico, $cliente, $desconto);
 
     }
 

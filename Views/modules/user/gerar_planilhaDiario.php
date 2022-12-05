@@ -27,13 +27,13 @@
         $resultadoAtendimento = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Chamadas de atendimentos
-        $sql = "SELECT atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date
+        $sql = "SELECT atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount
                 FROM attendance_calls atc
                 INNER JOIN worker wk
                     ON wk.worker_id = atc.worker_id
                 INNER JOIN attendance att
                     ON att.attendance_id = atc.attendance_id
-                WHERE atc.attendance_date = $hoje
+                WHERE atc.attendance_date = '$hoje'
                 ORDER BY atc.attendance_calls_id DESC";
 
         $stmt = $conexao->prepare($sql);
@@ -41,7 +41,7 @@
         $resultadoChamadaAtendimento = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Custos
-        $sql = "SELECT * FROM cost WHERE cost_date = $hoje";
+        $sql = "SELECT * FROM cost WHERE cost_date = '$hoje'";
         $stmt = $conexao->prepare($sql);
         $stmt->execute();
         $resultadoCustos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -128,23 +128,34 @@
 
                 if(isset($resultadoChamadaAtendimento)){
                     foreach($resultadoChamadaAtendimento as $chamadoAtendimento){
-                        $gain = $gain + $chamadoAtendimento['attendance_price'];
+
+                        if(!empty($chamadoAtendimento['attendance_discount'])){
+                            $discount = $chamadoAtendimento['attendance_discount'] * $chamadoAtendimento['attendance_price'];
+                            $realPrice = $chamadoAtendimento['attendance_price'] - $discount;
+                            $gain = $gain + $realPrice;
+                        } else {
+                            $gain = $gain + $chamadoAtendimento['attendance_price'];
+                        }
+
                         $totalGain = $gain;
                         $html .= '<tr>';
                             $html .= '<td>'.$chamadoAtendimento['attendance_name'].'</td>';
                             $html .= '<td>'.$chamadoAtendimento['worker_name'].'</td>';
                             $html .= '<td>'.$chamadoAtendimento['attendance_date'].'</td>';
-                            $html .= '<td>'.$chamadoAtendimento['attendance_price'].'</td>';
+                            if(!empty($realPrice)){
+                                $html .= '<td>'.$realPrice.'</td>';
+                            } else {
+                                $html .= '<td>'.$chamadoAtendimento['attendance_price'].'</td>';
+                            }
                         $html .= '</tr>';
+                        $realPrice = 0;
                     }
                     $html .= '<tr>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
-                        if(isset($totalGain)){
-                            $html .= '<td>'.'R$'.$totalGain.'</td>';
-                        }
+                        $html .= '<td>'.'R$'.$totalGain.'</td>';
                     $html .= '</tr>';
                 }
                 
@@ -154,6 +165,8 @@
         //PARTE DOS LUCROS ATUAIS
                 if(isset($totalGain) && isset($totalCost)){
                     $total = $totalGain-$totalCost;
+                } else {
+                    $total = $totalGain;
                 }
                 $html .= '<th>';
                     $html .= '<tr>';
@@ -195,12 +208,23 @@
                         $addGanho = 0;
                         foreach($resultadoChamadaAtendimento as $atendimento){
                             if($atendimento['worker_id'] == $trabalhador['worker_id']){
-                                $addGanho = $addGanho + $atendimento['attendance_price'];
+                                if(!empty($atendimento['attendance_discount'])){
+                                    $discount = $atendimento['attendance_discount'] * $atendimento['attendance_price'];
+                                    $realPrice = $atendimento['attendance_price'] - $discount;
+                                    $addGanho = $addGanho + $realPrice;
+                                } else {
+                                    $addGanho = $addGanho + $atendimento['attendance_price'];
+                                }
                             }
                         }
                         $html .= '<tr>';
                             $html .= '<td>'.$trabalhador['worker_name'].'</td>';
-                            $html .= '<td>'.'R$'.($addGanho).'</td>';
+                            if($trabalhador['worker_name'] == 'Vitor'){
+                                $addGanho = $addGanho * 0.45;
+                                $html .= '<td>'.'R$'.($addGanho).'</td>';
+                            } else {
+                                $html .= '<td>'.'R$'.($addGanho).'</td>';
+                            }
                         $html .= '</tr>';
                     }
                 }
