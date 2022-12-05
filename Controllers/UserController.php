@@ -44,6 +44,20 @@ class UserController
             $cost->saveClient($_POST['nome'], $_POST['endereco'], $_POST['celular']);
             header("Location: /usuario/login");
 
+        } else if(isset($_POST['vendaAction'])){
+
+            include_once 'Models/SaleModel.php';
+            $sale = new SaleModel();
+            $sale->saveSale($_POST['product'], $_POST['preco'], $_POST['cliente'], $_POST['data']);
+            header("Location: /usuario/login");
+
+        } else if(isset($_POST['tipo_produtoAction'])){
+
+            include_once 'Models/ProductModel.php';
+            $product = new ProductModel();
+            $product->saveProduct($_POST['nome']);
+            header("Location: /usuario/login");
+
         }
     }
 
@@ -81,6 +95,8 @@ class UserController
         include_once 'Models/CostModel.php';
         include_once 'Models/WorkerModel.php';
         include_once 'Models/AttendanceModel.php';
+        include_once 'Models/SaleModel.php';
+        include_once 'Models/ProductModel.php';
 
         $servicesModel = new ServicesModel();
         $attendanceModel = new AttendanceCallsModel();
@@ -88,6 +104,8 @@ class UserController
         $costModel = new CostModel();
         $workerModel = new WorkerModel();
         $attendanceSimpleModel = new AttendanceModel();
+        $saleModel = new SaleModel();
+        $productModel = new ProductModel();
 
         //Consulta os serviços disponiveis para aquele usuario do sistema!
         if(!empty($_SESSION['user_id'])){
@@ -95,7 +113,17 @@ class UserController
         } else {
             $objServices = $servicesModel->getAvaiableServicesByUserId($model->user_id);
         }
+
+        $saleModel->saleRows = $saleModel->getAllSales();
+        if(!empty($saleModel->saleRows)){
+            foreach($saleModel->saleRows as $sale){
+                $saleProfit = $saleProfit + $sale['sale_price'];
+            }
+            $saleModel->totalSale = $saleProfit;
+        }
         
+        $productModel->productRows = $productModel->getAllProducts();
+
         $cost = 0;
         $attendanceModel->attendanceRows = $attendanceModel->getAllAttendanceCalls();
         foreach( $attendanceModel->attendanceRows as $register){
@@ -122,7 +150,7 @@ class UserController
         $workerModel->workerRows = $workerModel->getAllWorkers();
         $attendanceSimpleModel->attendanceRows = $attendanceSimpleModel->getAllAttendance();
 
-        $attendanceModel->attendanceProfit = $attendanceModel->attendanceProfit - $costModel->totalCost;
+        $attendanceModel->attendanceProfit = $saleModel->totalSale + $attendanceModel->attendanceProfit - $costModel->totalCost;
 
         date_default_timezone_set('America/Sao_Paulo');
         $hoje = date('Y/m/d');

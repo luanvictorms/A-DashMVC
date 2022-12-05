@@ -38,6 +38,14 @@ switch($url){
         UserController::add();
     break;
 
+    case '/usuario/login/adicionarVenda':
+        UserController::add();
+    break;
+
+    case '/usuario/login/adicionarNovoProduto':
+        UserController::add();
+    break;
+
     //Deletar registros
     case '/usuario/atendimento/delete':
         UserController::delete();

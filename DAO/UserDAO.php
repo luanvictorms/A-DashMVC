@@ -129,6 +129,30 @@ class UserDAO
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function selectAllSales()
+    {
+        include_once 'Models/SaleModel.php';
+
+        $sql = "SELECT * FROM sale";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectAllProducts()
+    {
+        include_once 'Models/ProductModel.php';
+
+        $sql = "SELECT * FROM product";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function insertCost($cost_value, $cost_reason, $cost_date, $user_id)
     {
         $sql = "INSERT INTO cost (cost_value, cost_reason, cost_date, fk_user_id) VALUES (?,?,?,?)";
@@ -183,6 +207,33 @@ class UserDAO
         $stmt->execute();
     }
 
+    //Inserindo uma nova venda
+    public function insertSale($product_id, $sale_price, $client_id, $sale_date)
+    {
+        $sql = "INSERT INTO sale (product_id, sale_price, client_id, sale_date) VALUES (?,?,?,?)";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bindParam(1, $product_id);
+        $stmt->bindParam(2, $sale_price);
+        $stmt->bindParam(3, $client_id);
+        $stmt->bindParam(4, $sale_date);
+
+        $stmt->execute();
+    }
+
+    //Insere um novo produto
+    public function insertProduct($product_name)
+    {
+        $sql = "INSERT INTO product (product_name) VALUES (?)";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bindParam(1, $product_name);
+
+        $stmt->execute();
+    }
+
     public function deleteAttendance(int $id)
     {
         $sql = "DELETE FROM attendance_calls WHERE attendance_calls_id = ?";
@@ -206,6 +257,26 @@ class UserDAO
     public function deleteClient(int $id)
     {
         $sql = "DELETE FROM client WHERE client_id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+    }
+
+    public function deleteSale(int $id)
+    {
+        $sql = "DELETE FROM sale WHERE sale_id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+    }
+
+    public function deleteProduct(int $id)
+    {
+        $sql = "DELETE FROM product WHERE product_id = ?";
 
         $stmt = $this->conexao->prepare($sql);
         $stmt->bindParam(1, $id);

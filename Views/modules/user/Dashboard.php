@@ -267,6 +267,98 @@
 
             </div>
 
+            <div class="cards">
+                <div class="card-single">
+                    <div>
+                        <h1><?php 
+                            $ultimo = count($saleModel->saleRows);
+                            echo $ultimo;
+                            ?>
+                        </h1>
+                        <span>Produtos Vendidos</span>
+                    </div>
+                    <div>
+                        <label for="modalVendas" class="abrirModal"><span class="las la-plus-circle"></span></label>
+                        <input type="checkbox" class="checkboxModal" id="modalVendas">
+
+                        <div class="modal">
+                            <div class="conteudoModal" style="text-align: center;">
+                                <label for="modalVendas" class="fecharModal"><span class="las la-times-circle"></label>
+                                <h2 style="text-align:center; margin-top:10px">+ Venda</h2>
+                                <form action="/usuario/login/adicionarVenda" method="POST">
+                                    <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                        <input type="hidden" name="vendaAction">
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect01">Produto</label>
+                                            <select class="form-select" id="inputGroupSelect01" name="product" required>
+                                                <?php foreach($productModel->productRows as $product): ?>    
+                                                    <option value="<?php echo $product['product_id'] ?>"><?php echo $product['product_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect03">Preço</label>
+                                            <input type="number" id="inputGroupSelect03" class="form-control" name="preco">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect02">Cliente</label>
+                                            <select class="form-select" id="inputGroupSelect02" name="cliente" required>
+                                                <?php foreach($clientModel->clientRows as $obj): ?>
+                                                    <option value="<?php echo $obj['client_id'] ?>"><?php echo $obj['client_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect04">Data da Compra</label>
+                                            <input type="date" id="inputGroupSelect04" class="form-control" name="data" value="<?php echo $hoje;?>" required>
+                                        </div>
+
+                                        <input type="submit" class="btn btn-dark" value="Efetuar Venda">
+                                    </div>
+                                </form>
+                                <div>
+                                    <!--Modal de adicionar um novo produto-->
+                                    <label for="modalNewTypeProduct" class="abrirModal btn btn-dark" style="margin-top: 20px">
+                                        <span class="las la-plus-circle"></span>
+                                        <span>Adicionar Novos Produtos</span>
+                                    </label>
+                                    <input type="checkbox" class="checkboxModal" id="modalNewTypeProduct">
+
+                                    <div class="modal">
+                                        
+                                        <div class="conteudoModal" style="text-align: center;">
+                                            <label for="modalNewTypeProduct" class="fecharModal"><span class="las la-times-circle"></label>
+                                            <h2 style="text-align:center; margin-top:10px">Adicionar Novo Produto</h2>
+                                            <form action="/usuario/login/adicionarNovoProduto" method="POST">
+                                            <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                                <input type="hidden" name="tipo_produtoAction">
+
+                                                <div class="input-group mb-3">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Nome do Produto</label>
+                                                    <input type="text" id="inputGroupSelect01" class="form-control" name="nome" required>
+                                                </div>
+
+                                                <input type="submit" class="btn btn-dark" value="Adicionar Novo Produto">
+                                            </div>
+                                            
+                                            </form>
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="recent-grid">
                 <div class="projects">
                     <div class="card">
@@ -316,7 +408,7 @@
                                                                 <?php echo $row['attendance_date']; ?>
                                                             </td>
                                                             <!--<td><a href="/usuario/atendimento/update?id=">Editar</a></td>-->
-                                                            <td><a style="text-decoration: none" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>&mode=atendimento" class="las la-trash"></a></td>
+                                                            <td><a style="text-decoration: none; text-align:center" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>&mode=atendimento" class="las la-trash"></a></td>
                                                         </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -453,7 +545,7 @@
                                                             </td>
                                                             <td>
                                                                 <?php if($addAtendimento == 0): ?>
-                                                                    <a style="text-decoration: none" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>&mode=clientes" class="las la-trash"></a>
+                                                                    <a style="text-decoration: none;  text-align:center" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>&mode=clientes" class="las la-trash"></a>
                                                                 <?php endif; ?>
                                                             </td>
                                                             <?php $addAtendimento = 0; ?>
@@ -527,7 +619,7 @@
                                                             <?php echo $row['cost_date']; ?>
                                                         </td>
                                                         <td>
-                                                            <a style="text-decoration: none" href="/usuario/custo/delete?id=<?= $row['cost_id']?>&mode=custo" class="las la-trash"></a>
+                                                            <a style="text-decoration: none;  text-align:center" href="/usuario/custo/delete?id=<?= $row['cost_id']?>&mode=custo" class="las la-trash"></a>
                                                         </td>
                                                     </tr>
                                             <?php endforeach; ?>

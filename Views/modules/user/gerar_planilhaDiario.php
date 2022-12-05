@@ -15,6 +15,7 @@
         $cost = 0;
         $gain = 0;
         $addGanho = 0;
+        $teste = 0;
         //CONSULTAS AO BANCO
 
         $dsn = "mysql:host=localhost;dbname=mydb";
@@ -25,6 +26,18 @@
         $stmt = $conexao->prepare($sql);
         $stmt->execute();
         $resultadoAtendimento = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //Resultado Vendas Produtos
+        $sql = "SELECT s.sale_price, s.product_id, s.sale_date, p.product_id, p.product_name
+        FROM sale s
+        INNER JOIN product p
+            ON p.product_id = s.product_id
+        WHERE s.sale_date = '$hoje'
+        ORDER BY s.product_id DESC";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->execute();
+        $resultadoVendasProdutos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Chamadas de atendimentos
         $sql = "SELECT atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount
@@ -111,6 +124,44 @@
         $html .= '<br>';
         $html .= '<br>';
 
+        //PARTE DAS VENDAS DE PRODUTOS
+        $html .= '<th>';
+                    $html .= '<tr>';
+                        $html .= '<td colspan="4">Vendas de Produtos</td>';
+                    $html .= '</tr>';
+                $html .= '</th>';
+
+                $html .= '<tr>';
+                    $html .= '<td><b>Produto</b></td>';
+                    $html .= '<td><b>Preço do Produto</b></td>';
+                    $html .= '<td><b>Data da Venda</b></td>';
+                    $html .= '<td><b>Lucro Total</b></td>';
+                $html .= '</tr>';
+
+                if(isset($resultadoVendasProdutos)){
+                    foreach($resultadoVendasProdutos as $vendas){
+                        $teste = $teste + $vendas['sale_price'];
+                        $totalVenda = $teste;
+                    }
+
+                    foreach ($resultadoVendasProdutos as $vendas){
+                        $html .= '<tr>';
+                            $html .= '<td>'.$vendas['product_name'].'</td>';
+                            $html .= '<td>'.$vendas['sale_price'].'</td>';
+                            $html .= '<td>'.$vendas['sale_date'].'</td>';
+                        $html .= '</tr>';
+                    }
+                    $html .= '<tr>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'.'R$'.$totalVenda.'</td>';
+                    $html .= '</tr>';
+                }
+                
+        $html .= '<br>';
+        $html .= '<br>';
+
         //PARTE DE CHAMADO DE ATENDIMENTOS
                 $html .= '<th>';
                     $html .= '<tr>';
@@ -163,9 +214,11 @@
         $html .= '<br>';
 
         //PARTE DOS LUCROS ATUAIS
-                if(isset($totalGain) && isset($totalCost)){
-                    $total = $totalGain-$totalCost;
-                } else {
+                if(isset($totalGain) && isset($totalCost) && isset($totalVenda)){
+                    $total = $totalVenda + $totalGain - $totalCost;
+                } else if(isset($totalGain) && isset($totalVenda)){
+                    $total = $totalVenda + $totalGain;
+                }else {
                     $total = $totalGain;
                 }
                 $html .= '<th>';

@@ -264,6 +264,11 @@ tr td:last-child {
 
 }
 
+#modalVendas:checked + .modal {
+    display: flex;
+
+}
+
 #modalAtendimento:checked + .modal {
     display: flex;
 }
@@ -285,6 +290,10 @@ tr td:last-child {
 }
 
 #modalNewTypeAttendance:checked + .modal {
+    display: flex;
+}
+
+#modalNewTypeProduct:checked + .modal {
     display: flex;
 }
 
@@ -314,7 +323,7 @@ tr td:last-child {
 .modal .conteudoModal {
     border-radius: 5px;
     width: 60%;
-    height: 100%;
+    height: 90%;
     background-color: white;
 }
 
