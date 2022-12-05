@@ -323,7 +323,7 @@
                                     </table>
 
                                     <!--Modal de adicionar um novo serviço-->
-                                    <label for="modalNewTypeAttendance" class="abrirModal btn btn-dark" style="margin-top: 140px">
+                                    <label for="modalNewTypeAttendance" class="abrirModal btn btn-dark" style="margin-top: 20px">
                                         <span class="las la-plus-circle"></span>
                                         <span>Adicionar Serviços</span>
                                     </label>
@@ -453,9 +453,7 @@
                                                             </td>
                                                             <td>
                                                                 <?php if($addAtendimento == 0): ?>
-                                                                    
-                                                                        <a style="text-decoration: none" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>&mode=clientes" class="las la-trash"></a>
-                                                                    
+                                                                    <a style="text-decoration: none" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>&mode=clientes" class="las la-trash"></a>
                                                                 <?php endif; ?>
                                                             </td>
                                                             <?php $addAtendimento = 0; ?>
