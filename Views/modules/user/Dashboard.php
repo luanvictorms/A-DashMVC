@@ -100,6 +100,8 @@
                                 <form action="/usuario/login/adicionarCusto" method="POST">
                                 <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
 
+                                    <input type="hidden" name="custoAction">
+
                                     <div class="mb-3">
                                         <label for="motivo" class="form-label">Motivo de custo:</label>
                                         <input type="text" class="form-control" name="motivo" required>
@@ -143,6 +145,8 @@
                                 <h2 style="text-align:center; margin-top:10px">+ Atendimento</h2>
                                 <form action="/usuario/login/adicionarAtendimento" method="POST">
                                 <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                    <input type="hidden" name="atendimentoAction">
 
                                     <div class="input-group mb-3">
                                         <label class="input-group-text" for="inputGroupSelect01">Atendente</label>
@@ -207,6 +211,8 @@
                                 <h2 style="text-align:center; margin-top:10px">+ Cliente</h2>
                                 <form action="/usuario/login/adicionarCliente" method="POST">
                                 <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                    <input type="hidden" name="clienteAction">
 
                                     <div class="input-group mb-3">
                                         <label class="input-group-text" for="inputGroupSelect01">Nome</label>
@@ -295,7 +301,7 @@
                                                                 <?php echo $row['attendance_date']; ?>
                                                             </td>
                                                             <!--<td><a href="/usuario/atendimento/update?id=">Editar</a></td>-->
-                                                            <td><a style="text-decoration: none" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>" class="las la-trash"></a></td>
+                                                            <td><a style="text-decoration: none" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>&mode=atendimento" class="las la-trash"></a></td>
                                                         </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -315,6 +321,8 @@
                                             <h2 style="text-align:center; margin-top:10px">Adicionar Novo Tipo de Serviço</h2>
                                             <form action="/usuario/login/adicionarNovoTipoServico" method="POST">
                                             <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                                <input type="hidden" name="tipo_servicoAction">
 
                                                 <div class="input-group mb-3">
                                                     <label class="input-group-text" for="inputGroupSelect01">Nome do Serviço</label>
@@ -427,7 +435,7 @@
                                                             <td>
                                                                 <?php if($addAtendimento == 0): ?>
                                                                     
-                                                                        <a style="text-decoration: none" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>" class="las la-trash"></a>
+                                                                        <a style="text-decoration: none" href="/usuario/clientes/delete?id=<?= $rowClientes['client_id']?>&mode=clientes" class="las la-trash"></a>
                                                                     
                                                                 <?php endif; ?>
                                                             </td>
@@ -502,7 +510,7 @@
                                                             <?php echo $row['cost_date']; ?>
                                                         </td>
                                                         <td>
-                                                            <a style="text-decoration: none" href="/usuario/custo/delete?id=<?= $row['cost_id']?>" class="las la-trash"></a>
+                                                            <a style="text-decoration: none" href="/usuario/custo/delete?id=<?= $row['cost_id']?>&mode=custo" class="las la-trash"></a>
                                                         </td>
                                                     </tr>
                                             <?php endforeach; ?>

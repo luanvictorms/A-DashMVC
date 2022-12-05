@@ -23,31 +23,32 @@ switch($url){
 
     //Adicionar novo tipo de serviço
     case '/usuario/login/adicionarNovoTipoServico':
-        UserController::addNewTypeAttendance();
+        UserController::add();
     break;
 
     case '/usuario/login/adicionarCusto':
-        UserController::addCost();
+        UserController::add();
     break;
 
     case '/usuario/login/adicionarAtendimento':
-        UserController::addAttendance();
+        UserController::add();
     break;
 
     case '/usuario/login/adicionarCliente':
-        UserController::addClient();
+        UserController::add();
     break;
 
+    //Deletar registros
     case '/usuario/atendimento/delete':
-        UserController::deleteAttendance();
+        UserController::delete();
     break;
 
     case '/usuario/custo/delete':
-        UserController::deleteCost();
+        UserController::delete();
     break;
 
     case '/usuario/clientes/delete':
-        UserController::deleteClient();
+        UserController::delete();
     break;
 
     

@@ -6,49 +6,45 @@ class UserController
         include 'Views/modules/user/FormLogin.php';
     }
 
-    public static function addCost(){
-        include_once 'Models/CostModel.php';
+    //Metodo generico para adicionar um registro no banco
+    public static function add(){
+        if(isset($_POST['atendimentoAction'])){
 
-        $cost = new CostModel();
+            include_once 'Models/AttendanceCallsModel.php';
+            $cost = new AttendanceCallsModel();
+            $cost->saveAttendanceCall($_POST['atendente'], $_POST['data'], $_POST['servico'], $_POST['cliente']);
+            header("Location: /usuario/login");
 
-        if(!empty($_SESSION['user_id'])){
-            var_dump($_SESSION['user_id']);
-            $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], $_SESSION['user_id']);
-        } else if (!empty($model->user_id)){
-            var_dump($model->user_id);
-            $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], $model->user_id);
-        } else {
-            $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], 1);
+        } else if(isset($_POST['custoAction'])){
+
+            include_once 'Models/CostModel.php';
+            $cost = new CostModel();
+            if(!empty($_SESSION['user_id'])){
+                var_dump($_SESSION['user_id']);
+                $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], $_SESSION['user_id']);
+            } else if (!empty($model->user_id)){
+                var_dump($model->user_id);
+                $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], $model->user_id);
+            } else {
+                $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], 1);
+            }
+            header("Location: /usuario/login");
+
+        } else if(isset($_POST['tipo_servicoAction'])){
+
+            include_once 'Models/AttendanceModel.php';
+            $service = new AttendanceModel();
+            $service->saveAttendance($_POST['nome'], $_POST['preco']);
+            header("Location: /usuario/login");
+
+        } else if(isset($_POST['clienteAction'])) {
+
+            include_once 'Models/ClientModel.php';
+            $cost = new ClientModel();
+            $cost->saveClient($_POST['nome'], $_POST['endereco'], $_POST['celular']);
+            header("Location: /usuario/login");
+
         }
-        
-        header("Location: /usuario/login");
-    }
-
-    public static function addNewTypeAttendance(){
-        include_once 'Models/AttendanceModel.php';
-
-        $service = new AttendanceModel();
-
-        $service->saveAttendance($_POST['nome'], $_POST['preco']);
-        header("Location: /usuario/login");
-    }
-
-    public static function addAttendance(){
-        include_once 'Models/AttendanceCallsModel.php';
-
-        $cost = new AttendanceCallsModel();
-
-        $cost->saveAttendanceCall($_POST['atendente'], $_POST['data'], $_POST['servico'], $_POST['cliente']);
-        header("Location: /usuario/login");
-    }
-
-    public static function addClient(){
-        include_once 'Models/ClientModel.php';
-
-        $cost = new ClientModel();
-
-        $cost->saveClient($_POST['nome'], $_POST['endereco'], $_POST['celular']);
-        header("Location: /usuario/login");
     }
 
     public static function logar()
@@ -129,37 +125,34 @@ class UserController
         include_once 'Views/modules/user/Dashboard.php';
     }
 
-    public static function deleteAttendance()
-    {
-        include 'Models/AttendanceCallsModel.php';
+    //Metodo generico para deletar algo do sistema
+    public static function delete(){
+        if($_GET['mode'] == 'atendimento'){
 
-        $model = new AttendanceCallsModel();
+            include 'Models/AttendanceCallsModel.php';
+            $model = new AttendanceCallsModel();
 
-        $model->delete( (int) $_GET['id']); 
+            $model->delete( (int) $_GET['id']);
 
-        header("Location: /usuario/login");
-    }
+            header("Location: /usuario/login");
 
-    public static function deleteCost()
-    {
-        include 'Models/CostModel.php';
+        } else if($_GET['mode'] == 'clientes') {
 
-        $model = new CostModel();
+            include 'Models/ClientModel.php';
+            $model = new ClientModel();
 
-        $model->delete( (int) $_GET['id']); 
+            $model->delete( (int) $_GET['id']);
+            header("Location: /usuario/login");
 
-        header("Location: /usuario/login");
-    }
+        } else {
 
-    public static function deleteClient()
-    {
-        include 'Models/ClientModel.php';
+            include 'Models/CostModel.php';
+            $model = new CostModel();
 
-        $model = new ClientModel();
+            $model->delete( (int) $_GET['id']); 
+            header("Location: /usuario/login");
 
-        $model->delete( (int) $_GET['id']); 
-
-        header("Location: /usuario/login");
+        }
     }
     
 }
