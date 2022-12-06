@@ -114,6 +114,7 @@ class UserController
             $objServices = $servicesModel->getAvaiableServicesByUserId($model->user_id);
         }
 
+        //PEGANDO TODAS OS VENDAS
         $saleModel->saleRows = $saleModel->getAllSales();
         if(!empty($saleModel->saleRows)){
             foreach($saleModel->saleRows as $sale){
@@ -122,9 +123,12 @@ class UserController
             $saleModel->totalSale = $saleProfit;
         }
         
+        //PEGANDO TODOS OS PRODUTOS
         $productModel->productRows = $productModel->getAllProducts();
 
         $cost = 0;
+
+        //PEGANDO TODOS OS SERVIÇOS
         $attendanceModel->attendanceRows = $attendanceModel->getAllAttendanceCalls();
         foreach( $attendanceModel->attendanceRows as $register){
             if(!empty($register['attendance_discount'])){
@@ -138,18 +142,23 @@ class UserController
             $attendanceModel->attendanceProfit = $cost;
         }
 
+        //PEGANDO TODOS OS CLIENTES
         $clientModel->clientRows = $clientModel->getAllClients();
 
         $cost = 0;
+
+        //PEGANDO TODOS OS CUSTOS ADMINISTRATIVOS
         $costModel->costRows = $costModel->getAllCosts();
         foreach($costModel->costRows as $register){
             $cost = $cost + $register['cost_value'];
             $costModel->totalCost = $cost;
         }
 
+        //PEGANDO TODOS OS TRABALHADORES
         $workerModel->workerRows = $workerModel->getAllWorkers();
         $attendanceSimpleModel->attendanceRows = $attendanceSimpleModel->getAllAttendance();
 
+        //CALCULANDO OS LUCROS DA EMPRESA
         $attendanceModel->attendanceProfit = $saleModel->totalSale + $attendanceModel->attendanceProfit - $costModel->totalCost;
 
         date_default_timezone_set('America/Sao_Paulo');

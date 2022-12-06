@@ -12,6 +12,9 @@
         $gain = 0;
         $addGanho = 0;
         $teste = 0;
+        $totalGain = 0;
+        $totalCost = 0;
+        $totalVenda = 0;
         //CONSULTAS AO BANCO
 
         $dsn = "mysql:host=localhost;dbname=mydb";
@@ -206,14 +209,9 @@
         $html .= '<br>';
 
         //PARTE DOS LUCROS ATUAIS
-                if(isset($totalGain) && isset($totalCost) && isset($totalVenda)){
-                    $total = $totalVenda + $totalGain - $totalCost;
-                } else if(isset($totalGain) && isset($totalVenda)){
-                    $total = $totalVenda + $totalGain;
-                }else {
-                    $total = $totalGain;
-                }
 
+                $total = $totalVenda + $totalGain - $totalCost;
+                
                 $html .= '<th>';
                     $html .= '<tr>';
                         $html .= '<td colspan="4">Lucro Atual (Atendimentos + Vendas - Custos Administrativos)</td>';
