@@ -106,7 +106,7 @@
                         $html .= '<tr>';
                             $html .= '<td>'.$custo['cost_reason'].'</td>';
                             $html .= '<td>'.$custo['cost_date'].'</td>';
-                            $html .= '<td>'.$custo['cost_value'].'</td>';
+                            $html .= '<td>'.'-R$'.$custo['cost_value'].'</td>';
                         $html .= '</tr>';
                     }
                     $html .= '<tr>';
@@ -142,8 +142,8 @@
                     foreach ($resultadoVendasProdutos as $vendas){
                         $html .= '<tr>';
                             $html .= '<td>'.$vendas['product_name'].'</td>';
-                            $html .= '<td>'.$vendas['sale_price'].'</td>';
                             $html .= '<td>'.$vendas['sale_date'].'</td>';
+                            $html .= '<td>'.$vendas['sale_price'].'</td>';
                         $html .= '</tr>';
                     }
                     $html .= '<tr>';

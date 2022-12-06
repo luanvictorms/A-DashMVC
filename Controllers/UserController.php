@@ -114,6 +114,11 @@ class UserController
             $objServices = $servicesModel->getAvaiableServicesByUserId($model->user_id);
         }
 
+        $saleModel->totalSale = 0;
+        $attendanceModel->attendanceProfit = 0;
+        $costModel->totalCost = 0;
+        $saleProfit = 0;
+
         //PEGANDO TODAS OS VENDAS
         $saleModel->saleRows = $saleModel->getAllSales();
         if(!empty($saleModel->saleRows)){
@@ -130,18 +135,20 @@ class UserController
 
         //PEGANDO TODOS OS SERVIÇOS
         $attendanceModel->attendanceRows = $attendanceModel->getAllAttendanceCalls();
-        foreach( $attendanceModel->attendanceRows as $register){
-            if(!empty($register['attendance_discount'])){
-
-                $discount = $register['attendance_discount'] * $register['attendance_price'];
-                $realPrice = $register['attendance_price'] - $discount;
-                $cost = $cost + $realPrice;
-            } else {
-                $cost = $cost + $register['attendance_price'];
+        if(!empty($attendanceModel->attendanceRows)){
+            foreach($attendanceModel->attendanceRows as $register){
+                if(!empty($register['attendance_discount'])){
+    
+                    $discount = $register['attendance_discount'] * $register['attendance_price'];
+                    $realPrice = $register['attendance_price'] - $discount;
+                    $cost = $cost + $realPrice;
+                } else {
+                    $cost = $cost + $register['attendance_price'];
+                }
+                $attendanceModel->attendanceProfit = $cost;
             }
-            $attendanceModel->attendanceProfit = $cost;
         }
-
+       
         //PEGANDO TODOS OS CLIENTES
         $clientModel->clientRows = $clientModel->getAllClients();
 
@@ -149,9 +156,11 @@ class UserController
 
         //PEGANDO TODOS OS CUSTOS ADMINISTRATIVOS
         $costModel->costRows = $costModel->getAllCosts();
-        foreach($costModel->costRows as $register){
-            $cost = $cost + $register['cost_value'];
-            $costModel->totalCost = $cost;
+        if(!empty($costModel->costRows)){
+            foreach($costModel->costRows as $register){
+                $cost = $cost + $register['cost_value'];
+                $costModel->totalCost = $cost;
+            }
         }
 
         //PEGANDO TODOS OS TRABALHADORES
