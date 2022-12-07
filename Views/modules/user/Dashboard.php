@@ -107,7 +107,7 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
 
-                        <span>Custos Administrativos</span>
+                        <span>Adicionar Custos Administrativos</span>
                     </div>
                     <div>
                         <label for="modalCusto" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
@@ -158,7 +158,7 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
 
-                        <span>Atendimentos</span>
+                        <span>Adicionar Atendimento</span>
                     </div>
                     <div>
                         <label for="modalAtendimento" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
@@ -242,7 +242,7 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
 
-                        <span>Clientes</span>
+                        <span>Adicionar Cliente</span>
                     </div>
                     <div>
                         <label for="modalCliente" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></label>
@@ -321,7 +321,7 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
 
-                        <span>Produtos Vendidos</span>
+                        <span>Vender Produto</span>
                     </div>
                     <div>
                         <label for="modalVendas" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
@@ -371,14 +371,14 @@
                                 <div>
                                     <!--Modal de adicionar um novo produto-->
                                     <label for="modalNewTypeProduct" class="abrirModal btn btn-dark" style="margin-top: 20px">
-                                        <span style="font-size:small">Adicionar Novos Produtos</span>
+                                        <span style="font-size:small; color:white">Adicionar Novos Produtos</span>
                                     </label>
                                     <input type="checkbox" class="checkboxModal" id="modalNewTypeProduct">
 
                                     <div class="modal">
+                                        <label for="modalNewTypeProduct" class="fecharModal"><span class="las la-times-circle" style="color:black;"></label>
                                         
                                         <div class="conteudoModal" style="text-align: center;">
-                                            <label for="modalNewTypeProduct" class="fecharModal"><span class="las la-times-circle"></label>
                                             <h2 style="text-align:center; margin-top:10px">Adicionar Novo Produto</h2>
                                             <form action="/usuario/login/adicionarNovoProduto" method="POST">
                                             <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
@@ -616,7 +616,7 @@
                             <input type="checkbox" class="checkboxModal" id="modalClientesNovos">
 
                             <div class="modal">
-                                <label for="modalClientesNovos" class="fecharModal"><span class="las la-times-circle"></label>
+                                <label for="modalClientesNovos" class="fecharModal"><span class="las la-times-circle"></span></label>
                                 
                                 <div class="conteudoModal" style="text-align: center;">
                                     <h2 style="text-align:center; margin-top:10px">Todos os Clientes</h2>
