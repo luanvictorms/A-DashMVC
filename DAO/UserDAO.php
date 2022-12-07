@@ -95,7 +95,7 @@ class UserDAO
     {
         include_once 'Models/ClientModel.php';
 
-        $sql = "SELECT * FROM client ORDER BY client_id DESC";
+        $sql = "SELECT * FROM client";
 
         $stmt = $this->conexao->prepare($sql);
 

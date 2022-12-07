@@ -123,17 +123,19 @@
 
                                     <input type="hidden" name="custoAction">
 
-                                    <div class="mb-3">
-                                        <label for="motivo" class="form-label">Motivo de custo:</label>
-                                        <input type="text" class="form-control" name="motivo" required>
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="inputGroupSelect26">Motivo de custo</label>
+                                        <input type="text" id="inputGroupSelect26" class="form-control" name="motivo" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="data" class="form-label">Data de retirada:</label>
-                                        <input type="date" class="form-control" name="data" value="<?php echo $hoje;?>" required>
+
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="inputGroupSelect25">Data Atendimento</label>
+                                        <input type="date" id="inputGroupSelect25" class="form-control" name="data" value="<?php echo $hoje;?>" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="custo" class="form-label">Custo:</label>
-                                        <input type="number" class="form-control" name="custo" required>
+
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="inputGroupSelect27">Custo</label>
+                                        <input type="number" id="inputGroupSelect27" class="form-control" name="custo" required>
                                     </div>
 
                                     <input type="submit" class="btn btn-dark" value="Adicionar Custo">
@@ -183,19 +185,22 @@
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
+                                        
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="inputGroupSelect04">Data Atendimento</label>
                                             <input type="date" id="inputGroupSelect04" class="form-control" name="data" value="<?php echo $hoje;?>" required>
                                         </div>
+
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="inputGroupSelect02">Serviço</label>
-                                            <select class="form-select" id="inputGroupSelect02" name="servico" required>
-
+                                            <input type="search" id="texto" class="input-group-text" list="inputGroupSelect02" name="servico" required>
+                                            <datalist id="inputGroupSelect02">
+                                                
                                                 <?php foreach($attendanceSimpleModel->attendanceRows as $obj): ?>
                                                     <option value="<?php echo $obj['attendance_id'] ?>"><?php echo $obj['attendance_name'] ?></option>
                                                 <?php endforeach; ?>
 
-                                            </select>
+                                            </datalist>
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -211,13 +216,14 @@
 
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="inputGroupSelect03">Cliente</label>
-                                            <select class="form-select" id="inputGroupSelect03" name="cliente" required>
+                                            <input type="search" id="texto" class="input-group-text" list="inputGroupSelect03" name="cliente" required>
+                                            <datalist id="inputGroupSelect03">
 
                                                 <?php foreach($clientModel->clientRows as $obj): ?>
                                                     <option value="<?php echo $obj['client_id'] ?>"><?php echo $obj['client_name'] ?></option>
                                                 <?php endforeach; ?>
 
-                                            </select>
+                                            </datalist>
                                         </div>
 
                                         <input type="submit" class="btn btn-dark" value="Salvar Atendimento">
@@ -283,31 +289,6 @@
                     </div>
                 </div>
 
-                <?php foreach($objServices as $obj): ?>
-                    <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
-
-                        <div class="card-single">
-                            <div>
-                                <h1>R$<?php echo $attendanceModel->attendanceProfit; ?></h1>
-                                <span>
-                                    <?php if($attendanceModel->attendanceProfit > 0){
-                                        echo 'Lucro';
-                                    } else {
-                                        echo 'Prejuizo';
-                                    }?>
-                                </span>
-                            </div>
-                            <div>
-                                <span class="lab la-google-wallet"></span>
-                            </div>
-                        </div>
-
-                    <?php endif; ?>
-                <?php endforeach; ?>
-
-            </div>
-
-            <div class="cards">
                 <div class="card-single">
                     <div>
                         <?php foreach($objServices as $obj): ?>
@@ -338,12 +319,15 @@
                                         <input type="hidden" name="vendaAction">
 
                                         <div class="input-group mb-3">
-                                            <label class="input-group-text" for="inputGroupSelect01">Produto</label>
-                                            <select class="form-select" id="inputGroupSelect01" name="product" required>
+                                            <label class="input-group-text" for="inputGroupSelect20">Produto</label>
+                                            <input type="search" id="texto" class="input-group-text" list="inputGroupSelect20" name="product" required>
+
+                                            <datalist id="inputGroupSelect20">
                                                 <?php foreach($productModel->productRows as $product): ?>    
                                                     <option value="<?php echo $product['product_id'] ?>"><?php echo $product['product_name'] ?></option>
                                                 <?php endforeach; ?>
-                                            </select>
+                                            </datalist>
+
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -352,12 +336,15 @@
                                         </div>
 
                                         <div class="input-group mb-3">
-                                            <label class="input-group-text" for="inputGroupSelect02">Cliente</label>
-                                            <select class="form-select" id="inputGroupSelect02" name="cliente" required>
+                                            <label class="input-group-text" for="inputGroupSelect21">Cliente</label>
+                                            <input type="search" id="texto" class="input-group-text" list="inputGroupSelect21" name="cliente" required>
+
+                                            <datalist id="inputGroupSelect21">
                                                 <?php foreach($clientModel->clientRows as $obj): ?>
                                                     <option value="<?php echo $obj['client_id'] ?>"><?php echo $obj['client_name'] ?></option>
                                                 <?php endforeach; ?>
-                                            </select>
+                                            </datalist>
+
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -404,6 +391,34 @@
                     </div>
                 </div>
 
+            </div>
+
+            <div class="cards">
+
+                <?php foreach($objServices as $obj): ?>
+                    <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+
+                        <div class="card-single">
+                            <div>
+                                <h1>R$<?php echo $attendanceModel->attendanceProfit; ?></h1>
+                                <span>
+                                    <?php if($attendanceModel->attendanceProfit > 0){
+                                        echo 'Lucro';
+                                    } else {
+                                        echo 'Prejuizo';
+                                    }?>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="lab la-google-wallet"></span>
+                            </div>
+                        </div>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                
+
                 <div class="card-single">
                     <div>
                         <?php foreach($objServices as $obj): ?>
@@ -442,12 +457,13 @@
                                         </div>
 
                                         <div class="input-group mb-3">
-                                            <label class="input-group-text" for="inputGroupSelect03">Vale Para</label>
-                                            <select class="form-select" id="inputGroupSelect03" name="atendente" required>
+                                            <label class="input-group-text" for="inputGroupSelect22">Vale Para</label>
+                                            <select class="form-select" id="inputGroupSelect22" name="atendente" required>
                                                 <?php foreach($workerModel->workerRows as $obj): ?>    
                                                     <option value="<?php echo $obj['worker_id'] ?>"><?php echo $obj['worker_name'] ?></option>
                                                 <?php endforeach; ?>
                                             </select>
+
                                         </div>
 
                                         <div class="input-group mb-3">
