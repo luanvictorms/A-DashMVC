@@ -153,6 +153,18 @@ class UserDAO
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function selectAllTickets()
+    {
+        include_once 'Models/ValeModel.php';
+
+        $sql = "SELECT * FROM ticket";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function insertCost($cost_value, $cost_reason, $cost_date, $user_id)
     {
         $sql = "INSERT INTO cost (cost_value, cost_reason, cost_date, fk_user_id) VALUES (?,?,?,?)";
@@ -234,6 +246,22 @@ class UserDAO
         $stmt->execute();
     }
 
+    public function insertTicket($ticket_name, $ticket_reason, $ticket_value, $fk_worker_id, $fk_user_id, $ticket_date)
+    {
+        $sql = "INSERT INTO ticket (ticket_name, ticket_reason, ticket_value, fk_worker_id, fk_user_id, ticket_date) VALUES (?,?,?,?,?,?)";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bindParam(1, $ticket_name);
+        $stmt->bindParam(2, $ticket_reason);
+        $stmt->bindParam(3, $ticket_value);
+        $stmt->bindParam(4, $fk_worker_id);
+        $stmt->bindParam(5, $fk_user_id);
+        $stmt->bindParam(6, $ticket_date);
+
+        $stmt->execute();
+    }
+
     public function deleteAttendance(int $id)
     {
         $sql = "DELETE FROM attendance_calls WHERE attendance_calls_id = ?";
@@ -267,6 +295,16 @@ class UserDAO
     public function deleteSale(int $id)
     {
         $sql = "DELETE FROM sale WHERE sale_id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+    }
+
+    public function deleteTicket(int $id)
+    {
+        $sql = "DELETE FROM ticket WHERE ticket_id = ?";
 
         $stmt = $this->conexao->prepare($sql);
         $stmt->bindParam(1, $id);

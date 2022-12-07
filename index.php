@@ -42,6 +42,10 @@ switch($url){
         UserController::add();
     break;
 
+    case '/usuario/login/adicionarVale':
+        UserController::add();
+    break;
+
     case '/usuario/login/adicionarNovoProduto':
         UserController::add();
     break;

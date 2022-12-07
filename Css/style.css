@@ -4,7 +4,7 @@
     /*--main-color: #DD2F6E;*/
     --main-color: #1D2231;
     --color-dark: #1D2231;
-    --text-grey: #8390A2;
+    --text-grey: #000000;
 }
 
 * {
@@ -157,6 +157,7 @@ main {
 }
 
 .card-single div:first-child span {
+    font-size: 1.3rem;
     color: var(--text-grey);
 }
 
@@ -294,6 +295,10 @@ tr td:last-child {
 }
 
 #modalNewTypeProduct:checked + .modal {
+    display: flex;
+}
+
+#modalVale:checked + .modal {
     display: flex;
 }
 

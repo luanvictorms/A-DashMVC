@@ -20,10 +20,8 @@ class UserController
             include_once 'Models/CostModel.php';
             $cost = new CostModel();
             if(!empty($_SESSION['user_id'])){
-                var_dump($_SESSION['user_id']);
                 $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], $_SESSION['user_id']);
             } else if (!empty($model->user_id)){
-                var_dump($model->user_id);
                 $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], $model->user_id);
             } else {
                 $cost->saveCost($_POST['custo'], $_POST['motivo'], $_POST['data'], 1);
@@ -58,6 +56,17 @@ class UserController
             $product->saveProduct($_POST['nome']);
             header("Location: /usuario/login");
 
+        } else if(isset($_POST['valeAction'])){
+            include_once 'Models/ValeModel.php';
+            $vale = new ValeModel();
+            if(!empty($_SESSION['user_id'])){
+                $vale->saveTicket($_POST['name'], $_POST['reason'], $_POST['value'], $_POST['atendente'], $_SESSION['user_id'], $_POST['date']);
+            } else if (!empty($model->user_id)){
+                $vale->saveTicket($_POST['name'], $_POST['reason'], $_POST['value'], $_POST['atendente'], $model->user_id, $_POST['date']);
+            } else {
+                $vale->saveTicket($_POST['name'], $_POST['reason'], $_POST['value'], $_POST['atendente'], 1, $_POST['date']);
+            }
+            header("Location: /usuario/login");
         }
     }
 
@@ -97,6 +106,7 @@ class UserController
         include_once 'Models/AttendanceModel.php';
         include_once 'Models/SaleModel.php';
         include_once 'Models/ProductModel.php';
+        include_once 'Models/ValeModel.php';
 
         $servicesModel = new ServicesModel();
         $attendanceModel = new AttendanceCallsModel();
@@ -106,6 +116,7 @@ class UserController
         $attendanceSimpleModel = new AttendanceModel();
         $saleModel = new SaleModel();
         $productModel = new ProductModel();
+        $valeModel = new ValeModel();
 
         //Consulta os serviços disponiveis para aquele usuario do sistema!
         if(!empty($_SESSION['user_id'])){
@@ -113,11 +124,21 @@ class UserController
         } else {
             $objServices = $servicesModel->getAvaiableServicesByUserId($model->user_id);
         }
-
+        
         $saleModel->totalSale = 0;
         $attendanceModel->attendanceProfit = 0;
         $costModel->totalCost = 0;
         $saleProfit = 0;
+        $valeCost = 0;
+
+        //PEGANDO TODOS OS VALES
+        $valeModel->valeRows = $valeModel->getAllTickets();
+        if(!empty($valeModel->valeRows)){
+            foreach($valeModel->valeRows as $vale){
+                $valeCost = $valeCost + $vale['ticket_value'];
+            }
+            $valeModel->totalVale = $valeCost;
+        }
 
         //PEGANDO TODAS OS VENDAS
         $saleModel->saleRows = $saleModel->getAllSales();
@@ -168,7 +189,7 @@ class UserController
         $attendanceSimpleModel->attendanceRows = $attendanceSimpleModel->getAllAttendance();
 
         //CALCULANDO OS LUCROS DA EMPRESA
-        $attendanceModel->attendanceProfit = $saleModel->totalSale + $attendanceModel->attendanceProfit - $costModel->totalCost;
+        $attendanceModel->attendanceProfit = $saleModel->totalSale + $attendanceModel->attendanceProfit - $costModel->totalCost - $valeModel->totalVale;
 
         date_default_timezone_set('America/Sao_Paulo');
         $hoje = date('Y/m/d');

@@ -19,6 +19,8 @@
         $totalGain = 0;
         $totalCost = 0;
         $totalVenda = 0;
+        $totalTicketCost = 0;
+        $valorTicket = 0;
         //CONSULTAS AO BANCO
 
         $dsn = "mysql:host=localhost;dbname=mydb";
@@ -29,6 +31,17 @@
         $stmt = $conexao->prepare($sql);
         $stmt->execute();
         $resultadoAtendimento = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //Pegando as despesas com vale
+        $sql = "SELECT t.fk_worker_id, t.ticket_name, t.ticket_reason, t.ticket_value, t.ticket_date, w.worker_name, w.worker_id
+        FROM ticket t
+        INNER JOIN worker w
+            ON t.fk_worker_id = w.worker_id
+        WHERE t.ticket_date = '$hoje'
+        ORDER BY t.ticket_date DESC";
+        $stmt = $conexao->prepare($sql);
+        $stmt->execute();
+        $resultadoTicket = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Resultado Vendas Produtos
         $sql = "SELECT s.sale_price, s.product_id, s.sale_date, p.product_id, p.product_name
@@ -127,6 +140,53 @@
         $html .= '<br>';
         $html .= '<br>';
 
+        //PARTE DE VALES
+                $html .= '<th>';
+                $html .= '<tr>';
+                    $html .= '<td colspan="4">Custos com Vales</td>';
+                $html .= '</tr>';
+                $html .= '</th>';
+
+                $html .= '<tr>';
+                    $html .= '<td><b>Nome Vale</b></td>';
+                    $html .= '<td><b>Motivo</b></td>';
+                    $html .= '<td><b>Nome Atendente</b></td>';
+                    $html .= '<td><b>Data de Retirada</b></td>';
+                    $html .= '<td><b>Valor Vale</b></td>';
+                    $html .= '<td><b>Custo Total</b></td>';
+                $html .= '</tr>';
+
+                if(isset($resultadoTicket)){
+                    //Somando os custos do ticket
+                    foreach($resultadoTicket as $ticket){
+                        $valorTicket = $valorTicket + $ticket['ticket_value'];
+                        $totalTicketCost = $valorTicket;
+                    }
+
+                    //Mostrando tudo o que tem da tabela de vales
+                    foreach ($resultadoTicket as $ticket){
+                        $html .= '<tr>';
+                            $html .= '<td>'.$ticket['ticket_name'].'</td>';
+                            $html .= '<td>'.$ticket['ticket_reason'].'</td>';
+                            $html .= '<td>'.$ticket['worker_name'].'</td>';
+                            $html .= '<td>'.$ticket['ticket_date'].'</td>';
+                            $html .= '<td>'.'-R$'.$ticket['ticket_value'].'</td>';
+                        $html .= '</tr>';
+                    }
+                    $html .= '<tr>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'.'-R$'.$totalTicketCost.'</td>';
+                        
+                    $html .= '</tr>';
+                }
+
+        $html .= '<br>';
+        $html .= '<br>';
+
         //PARTE DAS VENDAS DE PRODUTOS
         $html .= '<th>';
                     $html .= '<tr>';
@@ -218,7 +278,7 @@
 
         //PARTE DOS LUCROS ATUAIS
 
-                $total = $totalVenda + $totalGain - $totalCost;
+                $total = $totalVenda + $totalGain - $totalTicketCost - $totalCost;
 
                 $html .= '<th>';
                     $html .= '<tr>';
@@ -235,7 +295,7 @@
                         if($total > 0){
                             $html .= '<td>'.'R$'.($total).'</td>';
                         } else {
-                            $html .= '<td>'.'R$-'.($total).'</td>';
+                            $html .= '<td>'.'-R$'.($total).'</td>';
                         }
                     }
                 $html .= '</tr>';

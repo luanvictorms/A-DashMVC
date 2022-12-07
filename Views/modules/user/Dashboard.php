@@ -39,7 +39,16 @@
                                     <span class="las la-box"></span>
                                 <?php endif; ?>
                                 
-                                <span><?php if($obj['service_name'] != 'Simple')echo $obj['service_name']; ?></span>
+                                <span>
+                                    <?php if($obj['service_name'] == 'Simple'){
+
+                                    } else if($obj['service_name'] == 'Administrador'){
+
+                                    } else {
+                                        echo $obj['service_name'];
+                                    }
+                                    ?>
+                                </span>
                             </a>
                         </li>
                     <?php endif; ?>
@@ -75,7 +84,14 @@
                             echo $model->user_name;
                         }?>
                     </h4>
-                    <small>Super Admin</small>
+                    <?php foreach($objServices as $obj): ?>
+                        <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+                            <small>Super Admin</small>
+                        <?php endif; ?>
+                        <?php if($obj['service_name'] == 'Simple') :?>
+                            <small>Usuario</small>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </header>
@@ -85,11 +101,16 @@
 
                 <div class="card-single">
                     <div>
-                        <h1>R$-<?php echo $costModel->totalCost; ?></h1>
+                        <?php foreach($objServices as $obj): ?>
+                            <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+                                <h1>R$-<?php echo $costModel->totalCost; ?></h1>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
                         <span>Custos Administrativos</span>
                     </div>
                     <div>
-                        <label for="modalCusto" class="abrirModal"><span class="las la-plus-circle"></span></label>
+                        <label for="modalCusto" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
                         <input type="checkbox" class="checkboxModal" id="modalCusto">
 
                         <div class="modal">
@@ -126,16 +147,21 @@
 
                 <div class="card-single">
                     <div>
-                        <h1>
-                            <?php 
-                                $ultimo = count($attendanceModel->attendanceRows);
-                                echo $ultimo;
-                            ?>
-                        </h1>
+                        <?php foreach($objServices as $obj): ?>
+                            <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+                                <h1>
+                                    <?php 
+                                        $ultimo = count($attendanceModel->attendanceRows);
+                                        echo $ultimo;
+                                    ?>
+                                </h1>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
                         <span>Atendimentos</span>
                     </div>
                     <div>
-                        <label for="modalAtendimento" class="abrirModal"><span class="las la-plus-circle"></span></label>
+                        <label for="modalAtendimento" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
                         <input type="checkbox" class="checkboxModal" id="modalAtendimento">
 
                         <div class="modal">
@@ -144,57 +170,58 @@
                             <div class="conteudoModal" style="text-align: center;">
                                 <h2 style="text-align:center; margin-top:10px">+ Atendimento</h2>
                                 <form action="/usuario/login/adicionarAtendimento" method="POST">
-                                <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
 
-                                    <input type="hidden" name="atendimentoAction">
+                                    <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
 
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect01">Atendente</label>
-                                        <select class="form-select" id="inputGroupSelect01" name="atendente" required>
-                                            <?php foreach($workerModel->workerRows as $obj): ?>    
-                                                <option value="<?php echo $obj['worker_id'] ?>"><?php echo $obj['worker_name'] ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                        <input type="hidden" name="atendimentoAction">
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect01">Atendente</label>
+                                            <select class="form-select" id="inputGroupSelect01" name="atendente" required>
+                                                <?php foreach($workerModel->workerRows as $obj): ?>    
+                                                    <option value="<?php echo $obj['worker_id'] ?>"><?php echo $obj['worker_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect04">Data Atendimento</label>
+                                            <input type="date" id="inputGroupSelect04" class="form-control" name="data" value="<?php echo $hoje;?>" required>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect02">Serviço</label>
+                                            <select class="form-select" id="inputGroupSelect02" name="servico" required>
+
+                                                <?php foreach($attendanceSimpleModel->attendanceRows as $obj): ?>
+                                                    <option value="<?php echo $obj['attendance_id'] ?>"><?php echo $obj['attendance_name'] ?></option>
+                                                <?php endforeach; ?>
+
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect05">Desconto</label>
+                                            <select class="form-select" id="inputGroupSelect05" name="desconto" required>
+                                                <option value="0">Sem Desconto</option>    
+                                                <option value="0.05">5%</option>
+                                                <option value="0.1">10%</option>
+                                                <option value="0.15">15%</option>
+                                                <option value="0.20">20%</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect03">Cliente</label>
+                                            <select class="form-select" id="inputGroupSelect03" name="cliente" required>
+
+                                                <?php foreach($clientModel->clientRows as $obj): ?>
+                                                    <option value="<?php echo $obj['client_id'] ?>"><?php echo $obj['client_name'] ?></option>
+                                                <?php endforeach; ?>
+
+                                            </select>
+                                        </div>
+
+                                        <input type="submit" class="btn btn-dark" value="Salvar Atendimento">
                                     </div>
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect04">Data Atendimento</label>
-                                        <input type="date" id="inputGroupSelect04" class="form-control" name="data" value="<?php echo $hoje;?>" required>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect02">Serviço</label>
-                                        <select class="form-select" id="inputGroupSelect02" name="servico" required>
-
-                                            <?php foreach($attendanceSimpleModel->attendanceRows as $obj): ?>
-                                                <option value="<?php echo $obj['attendance_id'] ?>"><?php echo $obj['attendance_name'] ?></option>
-                                            <?php endforeach; ?>
-
-                                        </select>
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect05">Desconto</label>
-                                        <select class="form-select" id="inputGroupSelect05" name="desconto" required>
-                                            <option value="0">Sem Desconto</option>    
-                                            <option value="0.05">5%</option>
-                                            <option value="0.1">10%</option>
-                                            <option value="0.15">15%</option>
-                                            <option value="0.20">20%</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect03">Cliente</label>
-                                        <select class="form-select" id="inputGroupSelect03" name="cliente" required>
-
-                                            <?php foreach($clientModel->clientRows as $obj): ?>
-                                                <option value="<?php echo $obj['client_id'] ?>"><?php echo $obj['client_name'] ?></option>
-                                            <?php endforeach; ?>
-
-                                        </select>
-                                    </div>
-
-                                    <input type="submit" class="btn btn-dark" value="Salvar Atendimento">
-                                </div>
                                 
                                 </form>
                             </div>
@@ -204,44 +231,51 @@
 
                 <div class="card-single">
                     <div>
-                        <h1><?php 
-                            $ultimo = count($clientModel->clientRows);
-                            echo $ultimo;
-                            ?>
-                        </h1>
+                        <?php foreach($objServices as $obj): ?>
+                            <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+                                <h1>
+                                    <?php 
+                                        $ultimo = count($clientModel->clientRows);
+                                        echo $ultimo;
+                                    ?>
+                                </h1>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
                         <span>Clientes</span>
                     </div>
                     <div>
-                        <label for="modalCliente" class="abrirModal"><span class="las la-plus-circle"></span></label>
+                        <label for="modalCliente" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></label>
                         <input type="checkbox" class="checkboxModal" id="modalCliente">
 
                         <div class="modal">
-                            <label for="modalCliente" class="fecharModal"><span class="las la-times-circle"></label>
+                            <label for="modalCliente" class="fecharModal"><span class="las la-times-circle" style="color:black;"></label>
                             
                             <div class="conteudoModal" style="text-align: center;">
                                 <h2 style="text-align:center; margin-top:10px">+ Cliente</h2>
                                 <form action="/usuario/login/adicionarCliente" method="POST">
-                                <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
 
-                                    <input type="hidden" name="clienteAction">
+                                    <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
 
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect01">Nome</label>
-                                        <input type="text" id="inputGroupSelect01" class="form-control" name="nome" required>
+                                        <input type="hidden" name="clienteAction">
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect01">Nome</label>
+                                            <input type="text" id="inputGroupSelect01" class="form-control" name="nome" required>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect02">Endereço</label>
+                                            <input type="text" id="inputGroupSelect02" class="form-control" name="endereco">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect03">Cel</label>
+                                            <input type="text" id="inputGroupSelect03" class="form-control" name="celular">
+                                        </div>
+
+                                        <input type="submit" class="btn btn-dark" value="Adicionar Cliente">
                                     </div>
-
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect02">Endereço</label>
-                                        <input type="text" id="inputGroupSelect02" class="form-control" name="endereco">
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect03">Cel</label>
-                                        <input type="text" id="inputGroupSelect03" class="form-control" name="celular">
-                                    </div>
-
-                                    <input type="submit" class="btn btn-dark" value="Adicionar Cliente">
-                                </div>
                                 
                                 </form>
                             </div>
@@ -249,41 +283,54 @@
                     </div>
                 </div>
 
-                <div class="card-single">
-                    <div>
-                        <h1>R$<?php echo $attendanceModel->attendanceProfit; ?></h1>
-                        <span>
-                            <?php if($attendanceModel->attendanceProfit > 0){
-                                echo 'Lucro';
-                            } else {
-                                echo 'Prejuizo';
-                            }?>
-                        </span>
-                    </div>
-                    <div>
-                        <span class="lab la-google-wallet"></span>
-                    </div>
-                </div>
+                <?php foreach($objServices as $obj): ?>
+                    <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+
+                        <div class="card-single">
+                            <div>
+                                <h1>R$<?php echo $attendanceModel->attendanceProfit; ?></h1>
+                                <span>
+                                    <?php if($attendanceModel->attendanceProfit > 0){
+                                        echo 'Lucro';
+                                    } else {
+                                        echo 'Prejuizo';
+                                    }?>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="lab la-google-wallet"></span>
+                            </div>
+                        </div>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
 
             </div>
 
             <div class="cards">
                 <div class="card-single">
                     <div>
-                        <h1><?php 
-                            $ultimo = count($saleModel->saleRows);
-                            echo $ultimo;
-                            ?>
-                        </h1>
+                        <?php foreach($objServices as $obj): ?>
+                            <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+                                <h1>
+                                    <?php 
+                                        $ultimo = count($saleModel->saleRows);
+                                        echo $ultimo;
+                                    ?>
+                                </h1>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
                         <span>Produtos Vendidos</span>
                     </div>
                     <div>
-                        <label for="modalVendas" class="abrirModal"><span class="las la-plus-circle"></span></label>
+                        <label for="modalVendas" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
                         <input type="checkbox" class="checkboxModal" id="modalVendas">
 
                         <div class="modal">
+                        <label for="modalVendas" class="fecharModal"><span class="las la-times-circle" style="color:black;"></label>
+                            
                             <div class="conteudoModal" style="text-align: center;">
-                                <label for="modalVendas" class="fecharModal"><span class="las la-times-circle"></label>
                                 <h2 style="text-align:center; margin-top:10px">+ Venda</h2>
                                 <form action="/usuario/login/adicionarVenda" method="POST">
                                     <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
@@ -324,8 +371,7 @@
                                 <div>
                                     <!--Modal de adicionar um novo produto-->
                                     <label for="modalNewTypeProduct" class="abrirModal btn btn-dark" style="margin-top: 20px">
-                                        <span class="las la-plus-circle"></span>
-                                        <span>Adicionar Novos Produtos</span>
+                                        <span style="font-size:small">Adicionar Novos Produtos</span>
                                     </label>
                                     <input type="checkbox" class="checkboxModal" id="modalNewTypeProduct">
 
@@ -352,6 +398,71 @@
                                     </div>
                                 
                                 </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-single">
+                    <div>
+                        <?php foreach($objServices as $obj): ?>
+                            <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
+                                <?php if(!empty($valeModel->totalVale)): ?>
+                                    <h1>R$-<?php echo $valeModel->totalVale; ?></h1>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
+                        <span>Adicionar Vale</span>
+                    </div>
+                    <div>
+                        <label for="modalVale" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></span></label>
+                        <input type="checkbox" class="checkboxModal" id="modalVale">
+
+                        <div class="modal">
+                            <label for="modalVale" class="fecharModal"><span class="las la-times-circle" style="color:black;"></label>
+                            
+                            <div class="conteudoModal" style="text-align: center;">
+                                <h2 style="text-align:center; margin-top:10px">+ Vale</h2>
+
+                                <form action="/usuario/login/adicionarVale" method="POST">
+                                    <div style="margin-top: 30%; padding-left: 20%; padding-right: 20%">
+
+                                        <input type="hidden" name="valeAction">
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect01">Nome Vale</label>
+                                            <input type="text" id="inputGroupSelect01" class="form-control" name="name" required>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect02">Motivo</label>
+                                            <input type="text" id="inputGroupSelect02" class="form-control" name="reason">
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect03">Vale Para</label>
+                                            <select class="form-select" id="inputGroupSelect03" name="atendente" required>
+                                                <?php foreach($workerModel->workerRows as $obj): ?>    
+                                                    <option value="<?php echo $obj['worker_id'] ?>"><?php echo $obj['worker_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect05">Valor</label>
+                                            <input type="number" id="inputGroupSelect05" class="form-control" name="value" required>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect04">Data do Vale</label>
+                                            <input type="date" id="inputGroupSelect04" class="form-control" name="date" value="<?php echo $hoje;?>" required>
+                                        </div>
+
+                                        <input type="submit" class="btn btn-dark" value="Adicionar Vale">
+                                    </div>
+                                </form>
                                 
                             </div>
                         </div>
