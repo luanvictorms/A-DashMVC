@@ -7,7 +7,7 @@ class UserDAO
     public function __construct()
     {
         $dsn = "mysql:host=localhost;dbname=mydb";
-        $this->conexao = new PDO($dsn, 'root', 'Deni@507050');
+        $this->conexao = new PDO($dsn, 'root', '');
         
     }
 
