@@ -8,6 +8,60 @@
 </head>
 <body>
     <?php
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+
+        switch($hoje){
+            case $hoje >= '2023-01-01' && $hoje <= '2023-01-31':
+                $condition = '2023-01-01';
+                $condition2= '2023-01-31';
+                break;
+            case $hoje >= '2023-02-01' && $hoje <= '2023-02-28':
+                $condition = '2023-02-01';
+                $condition2= '2023-02-28';
+                break;
+            case $hoje >= '2023-03-01' && $hoje <= '2023-03-31':
+                $condition = '2023-03-01';
+                $condition2= '2023-03-31';
+                break;
+            case $hoje >= '2023-04-01' && $hoje <= '2023-04-30':
+                $condition = '2023-04-01';
+                $condition2= '2023-04-30';
+            case $hoje >= '2023-05-01' && $hoje <= '2023-05-31':
+                $condition = '2023-05-01';
+                $condition2= '2023-05-31';
+                break;
+            case $hoje >= '2023-06-01' && $hoje <= '2023-06-30':
+                $condition = '2023-06-01';
+                $condition2= '2023-06-30';
+                break;
+            case $hoje >= '2023-07-01' && $hoje <= '2023-07-31':
+                $condition = '2023-07-01';
+                $condition2= '2023-07-31';
+                break;
+            case $hoje >= '2023-08-01' && $hoje <= '2023-08-31':
+                $condition = '2023-08-01';
+                $condition2= '2023-08-31';
+                break;
+            case $hoje >= '2023-09-01' && $hoje <= '2023-09-30':
+                $condition = '2023-09-01';
+                $condition2= '2023-09-30';
+                break;
+            case $hoje >= '2023-10-01' && $hoje <= '2023-10-31':
+                $condition = '2023-10-01';
+                $condition2= '2023-10-31';
+                break;
+            case $hoje >= '2023-11-01' && $hoje <= '2023-11-30':
+                $condition =  '2023-11-01';
+                $condition2= '2023-11-30';
+                break;
+            case $hoje >= '2023-12-01' && $hoje <= '2023-12-31':
+                $condition = '2023-12-01';
+                $condition2 = '2023-12-31';
+                break;
+        }
+
         $cost = 0;
         $gain = 0;
         $addGanho = 0;
@@ -33,6 +87,7 @@
         FROM ticket t
         INNER JOIN worker w
             ON t.fk_worker_id = w.worker_id
+        WHERE t.ticket_date >= '$condition' AND t.ticket_date <= '$condition2'
         ORDER BY t.ticket_date DESC";
         $stmt = $conexao->prepare($sql);
         $stmt->execute();
@@ -43,6 +98,7 @@
         FROM sale s
         INNER JOIN product p
             ON p.product_id = s.product_id
+        WHERE s.sale_date >= '$condition' AND s.sale_date <= '$condition2'
         ORDER BY s.product_id DESC";
 
         $stmt = $conexao->prepare($sql);
@@ -50,12 +106,15 @@
         $resultadoVendasProdutos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Chamadas de atendimentos
-        $sql = "SELECT atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount
+        $sql = "SELECT atc.attendance_payment, atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount, c.client_name
                 FROM attendance_calls atc
                 INNER JOIN worker wk
                     ON wk.worker_id = atc.worker_id
                 INNER JOIN attendance att
                     ON att.attendance_id = atc.attendance_id
+                INNER JOIN client c
+                    ON c.client_id = atc.client_id
+                WHERE atc.attendance_date >= '$condition' AND atc.attendance_date <= '$condition2'
                 ORDER BY atc.attendance_calls_id DESC";
 
         $stmt = $conexao->prepare($sql);
@@ -63,7 +122,9 @@
         $resultadoChamadaAtendimento = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Custos
-        $sql = "SELECT * FROM cost ORDER BY cost_date DESC";
+        $sql = "SELECT * FROM cost
+                WHERE cost_date >= '$condition' AND cost_date <= '$condition2'
+                ORDER BY cost_date DESC";
         $stmt = $conexao->prepare($sql);
         $stmt->execute();
         $resultadoCustos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -226,6 +287,8 @@
                 $html .= '<tr>';
                     $html .= '<td><b>Serviço</b></td>';
                     $html .= '<td><b>Atendente</b></td>';
+                    $html .= '<td><b>Cliente</b></td>';
+                    $html .= '<td><b>Tipo Pgto</b></td>';
                     $html .= '<td><b>Data</b></td>';
                     $html .= '<td><b>Valor</b></td>';
                     $html .= '<td><b>Lucro Total</b></td>';
@@ -246,6 +309,8 @@
                         $html .= '<tr>';
                             $html .= '<td>'.$chamadoAtendimento['attendance_name'].'</td>';
                             $html .= '<td>'.$chamadoAtendimento['worker_name'].'</td>';
+                            $html .= '<td>'.$chamadoAtendimento['client_name'].'</td>';
+                            $html .= '<td>'.$chamadoAtendimento['attendance_payment'].'</td>';
                             $html .= '<td>'.$chamadoAtendimento['attendance_date'].'</td>';
                             if(!empty($realPrice)){
                                 $html .= '<td>'.$realPrice.'</td>';
@@ -256,6 +321,8 @@
                         $realPrice = 0;
                     }
                     $html .= '<tr>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
@@ -324,7 +391,7 @@
                         $html .= '<tr>';
                             $html .= '<td>'.$trabalhador['worker_name'].'</td>';
                             if($trabalhador['worker_name'] == 'Vitor'){
-                                $addGanho = $addGanho * 0.45;
+                                $addGanho = $addGanho * 0.43;
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';
                             } else {
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';

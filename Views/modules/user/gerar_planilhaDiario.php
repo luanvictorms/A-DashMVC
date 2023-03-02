@@ -56,12 +56,14 @@
         $resultadoVendasProdutos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         //Chamadas de atendimentos
-        $sql = "SELECT atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount
+        $sql = "SELECT atc.attendance_payment, atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount, c.client_name
                 FROM attendance_calls atc
                 INNER JOIN worker wk
                     ON wk.worker_id = atc.worker_id
                 INNER JOIN attendance att
                     ON att.attendance_id = atc.attendance_id
+                INNER JOIN client c
+                    ON c.client_id = atc.client_id
                 WHERE atc.attendance_date = '$hoje'
                 ORDER BY atc.attendance_calls_id DESC";
 
@@ -90,7 +92,7 @@
         $html .= '<table border="1">';
         $html .= '<th>';
             $html .= '<tr>';
-                $html .= "<td colspan='4'> {$hoje} Relatorio Mensal de Custos</td>";
+                $html .= "<td colspan='4'> {$hoje} Relatorio Diario de Custos</td>";
             $html .= '</tr>';
         $html .= '</th>';
 
@@ -235,6 +237,8 @@
                 $html .= '<tr>';
                     $html .= '<td><b>Serviço</b></td>';
                     $html .= '<td><b>Atendente</b></td>';
+                    $html .= '<td><b>Cliente</b></td>';
+                    $html .= '<td><b>Tipo Pgto</b></td>';
                     $html .= '<td><b>Data</b></td>';
                     $html .= '<td><b>Valor</b></td>';
                     $html .= '<td><b>Lucro Total</b></td>';
@@ -255,6 +259,8 @@
                         $html .= '<tr>';
                             $html .= '<td>'.$chamadoAtendimento['attendance_name'].'</td>';
                             $html .= '<td>'.$chamadoAtendimento['worker_name'].'</td>';
+                            $html .= '<td>'.$chamadoAtendimento['client_name'].'</td>';
+                            $html .= '<td>'.$chamadoAtendimento['attendance_payment'].'</td>';
                             $html .= '<td>'.$chamadoAtendimento['attendance_date'].'</td>';
                             if(!empty($realPrice)){
                                 $html .= '<td>'.$realPrice.'</td>';
@@ -265,6 +271,8 @@
                         $realPrice = 0;
                     }
                     $html .= '<tr>';
+                        $html .= '<td>'."".'</td>';
+                        $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
                         $html .= '<td>'."".'</td>';
@@ -332,7 +340,7 @@
                         $html .= '<tr>';
                             $html .= '<td>'.$trabalhador['worker_name'].'</td>';
                             if($trabalhador['worker_name'] == 'Vitor'){
-                                $addGanho = $addGanho * 0.45;
+                                $addGanho = $addGanho * 0.43;
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';
                             } else {
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';

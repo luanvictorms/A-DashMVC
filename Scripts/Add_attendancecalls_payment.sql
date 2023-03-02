@@ -1,0 +1,1 @@
+ALTER TABLE attendance_calls ADD attendance_payment varchar(40);

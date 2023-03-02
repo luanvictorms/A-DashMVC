@@ -152,10 +152,10 @@
                         <?php foreach($objServices as $obj): ?>
                             <?php if(in_array($obj['service_name'] == 'Administrador',$obj)): ?>
                                 <h1>
-                                    <?php 
-                                        $ultimo = count($attendanceModel->attendanceRows);
-                                        echo $ultimo;
-                                    ?>
+                                    <?php if(!empty($attendanceModel->attendanceRows)): ?>
+                                        <?php $ultimo = count($attendanceModel->attendanceRows);
+                                        echo $ultimo; ?>
+                                    <?php endif; ?>
                                 </h1>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -183,6 +183,16 @@
                                                 <?php foreach($workerModel->workerRows as $obj): ?>    
                                                     <option value="<?php echo $obj['worker_id'] ?>"><?php echo $obj['worker_name'] ?></option>
                                                 <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="inputGroupSelect10">Tipo Pgto</label>
+                                            <select class="form-select" id="inputGroupSelect10" name="pagamento" required>
+                                                    <option value="PIX">PIX</option>
+                                                    <option value="PIX">DINHEIRO</option>
+                                                    <option value="CREDITO">Cartão de Debito</option>
+                                                    <option value="CREDITO">Cartão de Credito</option>
                                             </select>
                                         </div>
                                         
@@ -248,7 +258,7 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
 
-                        <span>Adicionar Cliente</span>
+                        <span>Registrar Cliente</span>
                     </div>
                     <div>
                         <label for="modalCliente" class="abrirModal"><span class="las la-plus-circle" style="cursor:pointer"></label>
@@ -506,21 +516,25 @@
                                             <tr class="tr-dark">
                                                 <td class="dark-table">Serviço</td>
                                                 <td class="dark-table">Atendente</td>
+                                                <td class="dark-table">Cliente</td>
                                                 <td class="dark-table">Valor</td>
                                                 <td class="dark-table">Status</td>
                                                 <td class="dark-table">Data</td>
                                                 <td></td>
-                                                <td></td>
                                             </tr>
                                         </thead>
                                             <tbody>
-                                                <?php foreach($attendanceModel->attendanceRows as $row): ?>
+                                                <?php if(!empty($attendanceModel->attendanceRows)): ?>
+                                                    <?php foreach($attendanceModel->attendanceRows as $row): ?>
                                                         <tr>
                                                             <td>
                                                                 <?php echo $row['attendance_name']; ?>
                                                             </td>
                                                             <td>
                                                                 <?php echo $row['worker_name']; ?>
+                                                            </td>
+                                                            <td>
+                                                                <?php echo $row['client_name']; ?>
                                                             </td>
                                                             <?php 
                                                                 $discount = $row['attendance_discount'] * $row['attendance_price'];
@@ -529,7 +543,7 @@
                                                             <td><?php echo "R$" . "{$realPrice}"; ?></td>
                                                             <td>
                                                                 <span class="status green"></span>
-                                                                Pago
+                                                                <?php echo $row['attendance_payment'];?>
                                                             </td>
                                                             <td>
                                                                 <?php echo $row['attendance_date']; ?>
@@ -537,7 +551,8 @@
                                                             <!--<td><a href="/usuario/atendimento/update?id=">Editar</a></td>-->
                                                             <td><a style="text-decoration: none; text-align:center" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>&mode=atendimento" class="las la-trash"></a></td>
                                                         </tr>
-                                                <?php endforeach; ?>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                     </table>
 
@@ -586,36 +601,43 @@
                                     <tr class="tr-dark">
                                         <td class="dark-table">Serviço</td>
                                         <td class="dark-table">Atendente</td>
+                                        <td class="dark-table">Cliente</td>
                                         <td class="dark-table">Valor</td>
-                                        <td class="dark-table">Status</td>
+                                        <td class="dark-table">Tipo Pgto</td>
                                         <td class="dark-table">Data</td>
                                     </tr>
                                 </thead>
                                     <tbody>
-                                        <?php foreach($attendanceModel->attendanceRows as $row): ?>
-                                            <?php if($hoje <= $row['attendance_date']): ?>
-                                                <tr>
-                                                    <td>
-                                                        <?php echo $row['attendance_name']; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $row['worker_name']; ?>
-                                                    </td>
-                                                    <?php 
-                                                        $discount = $row['attendance_discount'] * $row['attendance_price'];
-                                                        $realPrice = $row['attendance_price'] - $discount;
-                                                    ?>
-                                                    <td><?php echo "R$" . "{$realPrice}"; ?></td>
-                                                    <td>
-                                                        <span class="status green"></span>
-                                                        Pago
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $row['attendance_date']; ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
+                                        <?php if(!empty($attendanceModel->attendanceRows)): ?>
+                                            <?php foreach($attendanceModel->attendanceRows as $row): ?>
+                                                <?php if($hoje <= $row['attendance_date']): ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php echo $row['attendance_name']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['worker_name']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['client_name']; ?>
+                                                        </td>
+                                                        <?php 
+                                                            $discount = $row['attendance_discount'] * $row['attendance_price'];
+                                                            $realPrice = $row['attendance_price'] - $discount;
+                                                        ?>
+                                                        <td><?php echo "R$" . "{$realPrice}"; ?></td>
+                                                        <td>
+                                                            <span class="status green"></span>
+                                                            <?php echo $row['attendance_payment']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['attendance_date']; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                        
                                     </tbody>
                             </table>
                         </div>
@@ -648,7 +670,8 @@
                                             </tr>
                                         </thead>
                                             <tbody>
-                                                <?php foreach($clientModel->clientRows as $rowClientes): ?>
+                                                <?php if(!empty($clientModel->clientRows)): ?>
+                                                    <?php foreach($clientModel->clientRows as $rowClientes): ?>
                                                         <tr style="text-align:center">
                                                             <td>
                                                                 <?php echo $rowClientes['client_name']; ?>
@@ -677,7 +700,8 @@
                                                             </td>
                                                             <?php $addAtendimento = 0; ?>
                                                         </tr>
-                                                <?php endforeach; ?>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                     </table>
                                 </div>
@@ -734,7 +758,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach($costModel->costRows as $row): ?>
+                                            <?php if(!empty($costModel->costRows)): ?>
+                                                <?php foreach($costModel->costRows as $row): ?>
                                                     <tr>
                                                         <td>
                                                             <?php echo "R$" . "{$row['cost_value']},00"; ?>
@@ -749,7 +774,8 @@
                                                             <a style="text-decoration: none;  text-align:center" href="/usuario/custo/delete?id=<?= $row['cost_id']?>&mode=custo" class="las la-trash"></a>
                                                         </td>
                                                     </tr>
-                                            <?php endforeach; ?>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -766,21 +792,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($costModel->costRows as $row): ?>
-                                        <?php if($hoje <= $row['cost_date']): ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo "R$-" . "{$row['cost_value']},00"; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $row['cost_reason']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $row['cost_date']; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endif;?>
-                                    <?php endforeach; ?>
+                                    <?php if(!empty($costModel->costRows)): ?>
+                                        <?php foreach($costModel->costRows as $row): ?>
+                                            <?php if(!empty($row['cost_date'])): ?>
+                                                <?php if($hoje <= $row['cost_date']): ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php echo "R$-" . "{$row['cost_value']},00"; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['cost_reason']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['cost_date']; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endif;?>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif;?>
                                 </tbody>
                             </table>
                         </div>
@@ -855,7 +885,7 @@
                                                                         ?>
                                                                     <?php endforeach; ?>
                                                                     <?php if($obj['worker_name'] == 'Vitor'): ?>
-                                                                        <?php $addGanho = $addGanho * 0.45; ?>
+                                                                        <?php $addGanho = $addGanho * 0.43; ?>
                                                                         <?php echo "R$" . "$addGanho"; ?>
                                                                     <?php else: ?>
                                                                         <?php echo "R$" . "$addGanho"; ?>

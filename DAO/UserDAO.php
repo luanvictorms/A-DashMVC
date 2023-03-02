@@ -76,12 +76,14 @@ class UserDAO
     {
         include_once 'Models/AttendanceCallsModel.php';
 
-        $sql = "SELECT atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount
+        $sql = "SELECT atc.attendance_payment, atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount, c.client_name
                 FROM attendance_calls atc
                 INNER JOIN worker wk
                     ON wk.worker_id = atc.worker_id
                 INNER JOIN attendance att
                     ON att.attendance_id = atc.attendance_id
+                INNER JOIN client c
+                ON c.client_id = atc.client_id
                 ORDER BY atc.attendance_calls_id DESC";
 
         $stmt = $this->conexao->prepare($sql);
@@ -192,9 +194,9 @@ class UserDAO
         $stmt->execute();
     }
 
-    public function insertAttendanceCall($atendente, $data, $servico, $client, $desconto)
+    public function insertAttendanceCall($atendente, $data, $pagamento, $servico, $client, $desconto)
     {
-        $sql = "INSERT INTO attendance_calls (attendance_id, worker_id, client_id, attendance_date, attendance_discount) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO attendance_calls (attendance_id, worker_id, client_id, attendance_date, attendance_payment, attendance_discount) VALUES (?,?,?,?,?,?)";
 
         $stmt = $this->conexao->prepare($sql);
 
@@ -202,7 +204,8 @@ class UserDAO
         $stmt->bindParam(2, $atendente);
         $stmt->bindParam(3, $client);
         $stmt->bindParam(4, $data);
-        $stmt->bindParam(5, $desconto);
+        $stmt->bindParam(5, $pagamento);
+        $stmt->bindParam(6, $desconto);
 
         $stmt->execute();
     }

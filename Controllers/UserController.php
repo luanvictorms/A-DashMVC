@@ -12,7 +12,7 @@ class UserController
 
             include_once 'Models/AttendanceCallsModel.php';
             $cost = new AttendanceCallsModel();
-            $cost->saveAttendanceCall($_POST['atendente'], $_POST['data'], $_POST['servico'], $_POST['cliente'], $_POST['desconto']);
+            $cost->saveAttendanceCall($_POST['atendente'], $_POST['data'], $_POST['pagamento'], $_POST['servico'], $_POST['cliente'], $_POST['desconto']);
             header("Location: /usuario/login");
 
         } else if(isset($_POST['custoAction'])){
