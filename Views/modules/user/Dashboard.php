@@ -190,8 +190,8 @@
                                             <label class="input-group-text" for="inputGroupSelect10">Tipo Pgto</label>
                                             <select class="form-select" id="inputGroupSelect10" name="pagamento" required>
                                                     <option value="PIX">PIX</option>
-                                                    <option value="PIX">DINHEIRO</option>
-                                                    <option value="CREDITO">Cartão de Debito</option>
+                                                    <option value="DINHEIRO">DINHEIRO</option>
+                                                    <option value="DEBITO">Cartão de Debito</option>
                                                     <option value="CREDITO">Cartão de Credito</option>
                                             </select>
                                         </div>
