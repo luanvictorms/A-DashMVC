@@ -74,7 +74,7 @@
         //CONSULTAS AO BANCO
 
         $dsn = "mysql:host=localhost;dbname=mydb";
-        $conexao = new PDO($dsn, 'root', 'Deni@507050');
+        $conexao = new PDO($dsn, 'root', '');
 
         //Tipo de atendimento
         $sql = "SELECT * FROM attendance";
