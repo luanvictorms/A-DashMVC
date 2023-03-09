@@ -342,6 +342,12 @@
                             if($trabalhador['worker_name'] == 'Vitor'){
                                 $addGanho = $addGanho * 0.43;
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';
+                            } else if($trabalhador['worker_name'] == 'Kesley'){
+                                $addGanho = $addGanho * 0.429;
+                                $html .= '<td>'.'R$'.($addGanho).'</td>';
+                            } else if($trabalhador['worker_name'] == 'Sem_nome'){
+                                $addGanho = $addGanho * 0.429;
+                                $html .= '<td>'.'R$'.($addGanho).'</td>';
                             } else {
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';
                             }

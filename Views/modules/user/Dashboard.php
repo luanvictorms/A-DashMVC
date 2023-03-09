@@ -135,7 +135,7 @@
 
                                     <div class="input-group mb-3">
                                         <label class="input-group-text" for="inputGroupSelect27">Custo</label>
-                                        <input type="number" id="inputGroupSelect27" class="form-control" name="custo" required>
+                                        <input type="double" id="inputGroupSelect27" class="form-control" name="custo" required>
                                     </div>
 
                                     <input type="submit" class="btn btn-dark" value="Adicionar Custo">
@@ -342,7 +342,7 @@
 
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="inputGroupSelect03">Preço</label>
-                                            <input type="number" id="inputGroupSelect03" class="form-control" name="preco">
+                                            <input type="double" id="inputGroupSelect03" class="form-control" name="preco">
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -478,7 +478,7 @@
 
                                         <div class="input-group mb-3">
                                             <label class="input-group-text" for="inputGroupSelect05">Valor</label>
-                                            <input type="number" id="inputGroupSelect05" class="form-control" name="value" required>
+                                            <input type="double" id="inputGroupSelect05" class="form-control" name="value" required>
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -502,7 +502,7 @@
                         <div class="card-header">
                             <h3>Atendimento Diario</h3>
 
-                            <label for="modalAtendimentoDiario" class="btn btn-dark">Ver Atendimentos<span class="las la-arrow-right"></span></label>
+                            <label for="modalAtendimentoDiario" class="btn btn-dark">Ver Atendimentos Mensais<span class="las la-arrow-right"></span></label>
                             <input type="checkbox" class="checkboxModal" id="modalAtendimentoDiario">
 
                             <div class="modal">
@@ -580,7 +580,7 @@
 
                                                 <div class="input-group mb-3">
                                                     <label class="input-group-text" for="inputGroupSelect01">Preço do Serviço: R$</label>
-                                                    <input type="number" id="inputGroupSelect01" class="form-control" name="preco" required>
+                                                    <input type="double" id="inputGroupSelect01" class="form-control" name="preco" required>
                                                 </div>
                                                 
                                                 <input type="submit" class="btn btn-dark" value="Adicionar Novo Serviço">
@@ -650,7 +650,7 @@
                         <div class="card-header">
                             <h3>Clientes</h3>
 
-                            <label for="modalClientesNovos" class="btn btn-dark">Ver<span class="las la-arrow-right"></span></label>
+                            <label for="modalClientesNovos" class="btn btn-dark">Ver todos os clientes<span class="las la-arrow-right"></span></label>
                             <input type="checkbox" class="checkboxModal" id="modalClientesNovos">
 
                             <div class="modal">
@@ -739,7 +739,7 @@
                         <div class="card-header">
                             <h3>Custo Administrativo Diario</h3>
 
-                            <label for="modalCustoDiario" class="btn btn-dark">Ver Custos<span class="las la-arrow-right"></span></label>
+                            <label for="modalCustoDiario" class="btn btn-dark">Ver Custos Mensais<span class="las la-arrow-right"></span></label>
                             <input type="checkbox" class="checkboxModal" id="modalCustoDiario">
 
                             <div class="modal">
@@ -762,7 +762,7 @@
                                                 <?php foreach($costModel->costRows as $row): ?>
                                                     <tr>
                                                         <td>
-                                                            <?php echo "R$" . "{$row['cost_value']},00"; ?>
+                                                            <?php echo "R$" . "{$row['cost_value']}"; ?>
                                                         </td>
                                                         <td>
                                                             <?php echo $row['cost_reason']; ?>
@@ -795,10 +795,10 @@
                                     <?php if(!empty($costModel->costRows)): ?>
                                         <?php foreach($costModel->costRows as $row): ?>
                                             <?php if(!empty($row['cost_date'])): ?>
-                                                <?php if($hoje <= $row['cost_date']): ?>
+                                                <?php if($hoje == $row['cost_date']): ?>
                                                     <tr>
                                                         <td>
-                                                            <?php echo "R$-" . "{$row['cost_value']},00"; ?>
+                                                            <?php echo "R$-" . "{$row['cost_value']}"; ?>
                                                         </td>
                                                         <td>
                                                             <?php echo $row['cost_reason']; ?>
@@ -852,7 +852,66 @@
                             <div class="projects">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3>Ganho por Atendimento</h3>
+                                        <h3>Ganho por Atendimento Diario</h3>
+
+                                        <label for="modalGanhoTrabalhadorDiario" class="btn btn-dark">Ver Ganho por atendimento Mensal<span class="las la-arrow-right"></span></label>
+                                        <input type="checkbox" class="checkboxModal" id="modalGanhoTrabalhadorDiario">
+
+                                        <div class="modal">
+                                            <label for="modalGanhoTrabalhadorDiario" class="fecharModal"><span class="las la-times-circle"></label>
+                                            
+                                            <div class="conteudoModal trab" style="text-align: center;">
+                                                <h2 style="text-align:center; margin-top:10px">Ganhos por atendimento Mensal</h2>
+
+                                                <table width="100%" style="margin-top: 80px">
+                                                    <thead>
+                                                        <tr class="tr-dark">
+                                                            <td class="dark-table">Nome</td>
+                                                            <td class="dark-table">Ganhos</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach($workerModel->workerRows as $obj): ?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <?php echo $obj['worker_name']; ?>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <?php foreach($attendanceModel->attendanceRows as $attendanceCall): ?>
+                                                                            <?php if($attendanceCall['worker_id'] == $obj['worker_id']){
+                                                                                if(!empty($attendanceCall['attendance_discount'])){
+                                                                                    $discount = $attendanceCall['attendance_discount'] * $attendanceCall['attendance_price'];
+                                                                                    $realPrice = $attendanceCall['attendance_price'] - $discount;
+                                                                                    $addGanho = $addGanho + $realPrice;
+                                                                                } else {
+                                                                                    $addGanho = $addGanho + $attendanceCall['attendance_price'];
+                                                                                    $arrayGanho[] = ['ganho' => $addGanho, 'nome' => $obj['worker_name'], 'id' => $obj['worker_id']];
+                                                                                }
+                                                                            }  
+                                                                            ?>
+                                                                        <?php endforeach; ?>
+                                                                            <?php if($obj['worker_name'] == 'Vitin'): ?>
+                                                                                <?php $addGanho = $addGanho * 0.429; ?>
+                                                                                <?php echo "R$" . "$addGanho"; ?>
+                                                                            <?php elseif ($obj['worker_name'] == 'Kesley'): ?>
+                                                                                <?php $addGanho = $addGanho * 0.429; ?>
+                                                                                <?php echo "R$" . "$addGanho"; ?>
+                                                                            <?php elseif($obj['worker_name'] == 'Sem_nome'): ?>
+                                                                                <?php $addGanho = $addGanho * 0.429; ?>
+                                                                                <?php echo "R$" . "$addGanho"; ?>
+                                                                            <?php else: ?>
+                                                                                <?php echo "R$" . "$addGanho"; ?>
+                                                                            <?php endif; ?>
+                                                                        <?php $addGanho = 0; ?>
+                                                                    </td>
+                                                                </tr>
+                                                        <?php endforeach; ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="card-body">
@@ -870,26 +929,33 @@
                                                                     <?php echo $obj['worker_name']; ?>
                                                                 </td>
                                                                 <td>
-
-                                                                    <?php foreach($attendanceModel->attendanceRows as $attendanceCall): ?>
-                                                                        <?php if($attendanceCall['worker_id'] == $obj['worker_id']){
-                                                                            if(!empty($attendanceCall['attendance_discount'])){
-                                                                                $discount = $attendanceCall['attendance_discount'] * $attendanceCall['attendance_price'];
-                                                                                $realPrice = $attendanceCall['attendance_price'] - $discount;
-                                                                                $addGanho = $addGanho + $realPrice;
-                                                                            } else {
-                                                                                $addGanho = $addGanho + $attendanceCall['attendance_price'];
-                                                                                $arrayGanho[] = ['ganho' => $addGanho, 'nome' => $obj['worker_name'], 'id' => $obj['worker_id']];
-                                                                            }
-                                                                        }  
-                                                                        ?>
-                                                                    <?php endforeach; ?>
-                                                                    <?php if($obj['worker_name'] == 'Vitor'): ?>
-                                                                        <?php $addGanho = $addGanho * 0.43; ?>
-                                                                        <?php echo "R$" . "$addGanho"; ?>
-                                                                    <?php else: ?>
-                                                                        <?php echo "R$" . "$addGanho"; ?>
-                                                                    <?php endif; ?>
+                                                                        <?php foreach($attendanceModel->attendanceRows as $attendanceCall): ?>
+                                                                            <?php if($attendanceCall['worker_id'] == $obj['worker_id']){
+                                                                                if(!empty($attendanceCall['attendance_discount']) && $attendanceCall['attendance_date'] == $hoje){
+                                                                                    $discount = $attendanceCall['attendance_discount'] * $attendanceCall['attendance_price'];
+                                                                                    $realPrice = $attendanceCall['attendance_price'] - $discount;
+                                                                                    $addGanho = $addGanho + $realPrice;
+                                                                                } else {
+                                                                                    if($attendanceCall['attendance_date'] == $hoje){
+                                                                                        $addGanho = $addGanho + $attendanceCall['attendance_price'];
+                                                                                        $arrayGanho[] = ['ganho' => $addGanho, 'nome' => $obj['worker_name'], 'id' => $obj['worker_id']];
+                                                                                    }
+                                                                                }
+                                                                            }  
+                                                                            ?>
+                                                                        <?php endforeach; ?>
+                                                                        <?php if($obj['worker_name'] == 'Vitin'): ?>
+                                                                            <?php $addGanho = $addGanho * 0.429; ?>
+                                                                            <?php echo "R$" . "$addGanho"; ?>
+                                                                        <?php elseif ($obj['worker_name'] == 'Kesley'): ?>
+                                                                            <?php $addGanho = $addGanho * 0.429; ?>
+                                                                            <?php echo "R$" . "$addGanho"; ?>
+                                                                        <?php elseif($obj['worker_name'] == 'Sem_nome'): ?>
+                                                                            <?php $addGanho = $addGanho * 0.429; ?>
+                                                                            <?php echo "R$" . "$addGanho"; ?>
+                                                                        <?php else: ?>
+                                                                            <?php echo "R$" . "$addGanho"; ?>
+                                                                        <?php endif; ?>
                                                                     <?php $addGanho = 0; ?>
                                                                 </td>
                                                             </tr>
@@ -925,6 +991,59 @@
                         <?php endif; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
+
+                <div class="projects">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Vales Diarios</h3>
+                        </div>
+                        
+                        <div class="card-body">
+                            <table width="100%">
+                                <thead>
+                                    <tr class="tr-dark">
+                                        <td class="dark-table">Nome vale</td>
+                                        <td class="dark-table">Motivo</td>
+                                        <td class="dark-table">Valor</td>
+                                        <td class="dark-table">Ticket Para?</td>
+                                        <td class="dark-table">Data</td>
+                                    </tr>
+                                </thead>
+                                    <tbody>
+                                        <?php if(!empty($valeModel->valeRows)): ?>
+                                            <?php foreach($valeModel->valeRows as $row): ?>
+                                                <?php if($hoje <= $row['ticket_date']): ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php echo $row['ticket_name']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['ticket_reason']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['ticket_value']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php foreach($workerModel->workerRows as $worker){
+                                                                if($worker['worker_id'] == $row['fk_worker_id']){
+                                                                    echo $worker['worker_name'];
+                                                                }
+                                                            } 
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $row['ticket_date']; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                        
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>

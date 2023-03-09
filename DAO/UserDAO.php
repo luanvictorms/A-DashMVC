@@ -83,8 +83,33 @@ class UserDAO
                 INNER JOIN attendance att
                     ON att.attendance_id = atc.attendance_id
                 INNER JOIN client c
-                ON c.client_id = atc.client_id
-                ORDER BY atc.attendance_calls_id DESC";
+                    ON c.client_id = atc.client_id
+                ORDER BY atc.worker_id ASC";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Seleciona todos as chamadas de atendimentos diarias
+    public function selectTodayAttendanceCalls()
+    {
+        include_once 'Models/AttendanceCallsModel.php';
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+
+        $sql = "SELECT atc.attendance_payment, atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount, c.client_name
+                FROM attendance_calls atc
+                INNER JOIN worker wk
+                    ON wk.worker_id = atc.worker_id
+                INNER JOIN attendance att
+                    ON att.attendance_id = atc.attendance_id
+                INNER JOIN client c
+                    ON c.client_id = atc.client_id
+                WHERE atc.attendance_date = $hoje
+                ORDER BY atc.worker_id ASC";
 
         $stmt = $this->conexao->prepare($sql);
 

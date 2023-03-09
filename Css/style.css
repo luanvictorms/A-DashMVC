@@ -231,7 +231,6 @@ td .status {
 }
 
 tr td:last-child {
-    display: flex;
     align-items: center;
 }
 
@@ -301,6 +300,12 @@ tr td:last-child {
 #modalVale:checked + .modal {
     display: flex;
 }
+
+#modalGanhoTrabalhadorDiario:checked + .modal {
+    display: flex;
+}
+
+
 
 
 .modal{

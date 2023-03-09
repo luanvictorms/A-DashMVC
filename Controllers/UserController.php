@@ -169,7 +169,7 @@ class UserController
                 $attendanceModel->attendanceProfit = $cost;
             }
         }
-       
+
         //PEGANDO TODOS OS CLIENTES
         $clientModel->clientRows = $clientModel->getAllClients();
 
