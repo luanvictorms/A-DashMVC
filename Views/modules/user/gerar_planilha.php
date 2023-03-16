@@ -73,8 +73,10 @@
         $valorTicket = 0;
         //CONSULTAS AO BANCO
 
+        /*$dsn = "mysql:host=localhost;dbname=mydb";
+        $conexao = new PDO($dsn, 'root', '');*/
         $dsn = "mysql:host=localhost;dbname=mydb";
-        $conexao = new PDO($dsn, 'root', '');
+        $conexao = new PDO($dsn, 'root', 'Deni@507050');
 
         //Tipo de atendimento
         $sql = "SELECT * FROM attendance";

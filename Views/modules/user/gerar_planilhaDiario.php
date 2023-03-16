@@ -23,8 +23,10 @@
         $valorTicket = 0;
         //CONSULTAS AO BANCO
 
+        /*$dsn = "mysql:host=localhost;dbname=mydb";
+        $conexao = new PDO($dsn, 'root', '');*/
         $dsn = "mysql:host=localhost;dbname=mydb";
-        $conexao = new PDO($dsn, 'root', '');
+        $conexao = new PDO($dsn, 'root', 'Deni@507050');
 
         //Tipo de atendimento
         $sql = "SELECT * FROM attendance";
@@ -339,7 +341,7 @@
                         }
                         $html .= '<tr>';
                             $html .= '<td>'.$trabalhador['worker_name'].'</td>';
-                            if($trabalhador['worker_name'] == 'Vitor'){
+                            if($trabalhador['worker_name'] == 'Vitin'){
                                 $addGanho = $addGanho * 0.43;
                                 $html .= '<td>'.'R$'.($addGanho).'</td>';
                             } else if($trabalhador['worker_name'] == 'Kesley'){

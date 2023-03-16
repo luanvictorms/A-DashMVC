@@ -848,7 +848,7 @@
                 
                 <?php foreach($objServices as $obj): ?>
                     <?php if(!empty($obj)): ?>
-                        <?php if($obj['service_name'] == 'Contabilidade'): ?>
+                        <?php if($obj['service_name'] == 'Simple' || $obj['service_name'] == 'Administrador'): ?>
                             <div class="projects">
                                 <div class="card">
                                     <div class="card-header">
