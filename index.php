@@ -26,6 +26,11 @@ switch($url){
         UserController::add();
     break;
 
+    case '/usuario/logout/':
+        session_destroy();
+        UserController::pageLogin();
+    break;
+
     case '/usuario/login/adicionarCusto':
         UserController::add();
     break;
@@ -62,8 +67,6 @@ switch($url){
     case '/usuario/clientes/delete':
         UserController::delete();
     break;
-
-    
 
     /*
     case '/pessoa':

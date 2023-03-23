@@ -16,6 +16,17 @@ class ValeModel
         return ($obj) ? $obj : new ValeModel();
     }
 
+    public function getMonthTickets()
+    {
+        include_once 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->selectMonthTickets();
+
+        return ($obj) ? $obj : new ValeModel();
+    }
+
     public function saveTicket($ticket_name, $ticket_reason, $ticket_value, $fk_worker_id, $fk_user_id, $ticket_date)
     {
         include 'DAO/UserDAO.php';

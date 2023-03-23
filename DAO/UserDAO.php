@@ -117,6 +117,145 @@ class UserDAO
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function selectMonthAttendanceCalls()
+    {
+        include_once 'Models/AttendanceCallsModel.php';
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+
+        switch($hoje){
+            case $hoje >= '2023-01-01' && $hoje <= '2023-01-31':
+                $condition = '2023-01-01';
+                $condition2= '2023-01-31';
+                break;
+            case $hoje >= '2023-02-01' && $hoje <= '2023-02-28':
+                $condition = '2023-02-01';
+                $condition2= '2023-02-28';
+                break;
+            case $hoje >= '2023-03-01' && $hoje <= '2023-03-31':
+                $condition = '2023-03-01';
+                $condition2= '2023-03-31';
+                break;
+            case $hoje >= '2023-04-01' && $hoje <= '2023-04-30':
+                $condition = '2023-04-01';
+                $condition2= '2023-04-30';
+            case $hoje >= '2023-05-01' && $hoje <= '2023-05-31':
+                $condition = '2023-05-01';
+                $condition2= '2023-05-31';
+                break;
+            case $hoje >= '2023-06-01' && $hoje <= '2023-06-30':
+                $condition = '2023-06-01';
+                $condition2= '2023-06-30';
+                break;
+            case $hoje >= '2023-07-01' && $hoje <= '2023-07-31':
+                $condition = '2023-07-01';
+                $condition2= '2023-07-31';
+                break;
+            case $hoje >= '2023-08-01' && $hoje <= '2023-08-31':
+                $condition = '2023-08-01';
+                $condition2= '2023-08-31';
+                break;
+            case $hoje >= '2023-09-01' && $hoje <= '2023-09-30':
+                $condition = '2023-09-01';
+                $condition2= '2023-09-30';
+                break;
+            case $hoje >= '2023-10-01' && $hoje <= '2023-10-31':
+                $condition = '2023-10-01';
+                $condition2= '2023-10-31';
+                break;
+            case $hoje >= '2023-11-01' && $hoje <= '2023-11-30':
+                $condition =  '2023-11-01';
+                $condition2= '2023-11-30';
+                break;
+            case $hoje >= '2023-12-01' && $hoje <= '2023-12-31':
+                $condition = '2023-12-01';
+                $condition2 = '2023-12-31';
+                break;
+        }
+
+        $sql = "SELECT atc.attendance_payment, atc.attendance_calls_id, atc.attendance_id, atc.worker_id, atc.client_id, wk.worker_name, wk.worker_id, att.attendance_id, att.attendance_name, att.attendance_price, atc.attendance_date, atc.attendance_discount, c.client_name
+                FROM attendance_calls atc
+                INNER JOIN worker wk
+                    ON wk.worker_id = atc.worker_id
+                INNER JOIN attendance att
+                    ON att.attendance_id = atc.attendance_id
+                INNER JOIN client c
+                    ON c.client_id = atc.client_id
+                WHERE atc.attendance_date >= '$condition' AND atc.attendance_date <= '$condition2'
+                ORDER BY atc.worker_id ASC";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectMonthCosts()
+    {
+        include_once 'Models/CostModel.php';
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+
+        switch($hoje){
+            case $hoje >= '2023-01-01' && $hoje <= '2023-01-31':
+                $condition = '2023-01-01';
+                $condition2= '2023-01-31';
+                break;
+            case $hoje >= '2023-02-01' && $hoje <= '2023-02-28':
+                $condition = '2023-02-01';
+                $condition2= '2023-02-28';
+                break;
+            case $hoje >= '2023-03-01' && $hoje <= '2023-03-31':
+                $condition = '2023-03-01';
+                $condition2= '2023-03-31';
+                break;
+            case $hoje >= '2023-04-01' && $hoje <= '2023-04-30':
+                $condition = '2023-04-01';
+                $condition2= '2023-04-30';
+            case $hoje >= '2023-05-01' && $hoje <= '2023-05-31':
+                $condition = '2023-05-01';
+                $condition2= '2023-05-31';
+                break;
+            case $hoje >= '2023-06-01' && $hoje <= '2023-06-30':
+                $condition = '2023-06-01';
+                $condition2= '2023-06-30';
+                break;
+            case $hoje >= '2023-07-01' && $hoje <= '2023-07-31':
+                $condition = '2023-07-01';
+                $condition2= '2023-07-31';
+                break;
+            case $hoje >= '2023-08-01' && $hoje <= '2023-08-31':
+                $condition = '2023-08-01';
+                $condition2= '2023-08-31';
+                break;
+            case $hoje >= '2023-09-01' && $hoje <= '2023-09-30':
+                $condition = '2023-09-01';
+                $condition2= '2023-09-30';
+                break;
+            case $hoje >= '2023-10-01' && $hoje <= '2023-10-31':
+                $condition = '2023-10-01';
+                $condition2= '2023-10-31';
+                break;
+            case $hoje >= '2023-11-01' && $hoje <= '2023-11-30':
+                $condition =  '2023-11-01';
+                $condition2= '2023-11-30';
+                break;
+            case $hoje >= '2023-12-01' && $hoje <= '2023-12-31':
+                $condition = '2023-12-01';
+                $condition2 = '2023-12-31';
+                break;
+        }
+
+        $sql = "SELECT * FROM cost WHERE cost_date >= '$condition' AND cost_date <= '$condition2' ORDER BY cost_date DESC";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     //Seleciona todos os Clientes
     public function selectAllClients()
     {
@@ -168,6 +307,71 @@ class UserDAO
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function selectMonthSales()
+    {
+        include_once 'Models/SaleModel.php';
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+
+        switch($hoje){
+            case $hoje >= '2023-01-01' && $hoje <= '2023-01-31':
+                $condition = '2023-01-01';
+                $condition2= '2023-01-31';
+                break;
+            case $hoje >= '2023-02-01' && $hoje <= '2023-02-28':
+                $condition = '2023-02-01';
+                $condition2= '2023-02-28';
+                break;
+            case $hoje >= '2023-03-01' && $hoje <= '2023-03-31':
+                $condition = '2023-03-01';
+                $condition2= '2023-03-31';
+                break;
+            case $hoje >= '2023-04-01' && $hoje <= '2023-04-30':
+                $condition = '2023-04-01';
+                $condition2= '2023-04-30';
+            case $hoje >= '2023-05-01' && $hoje <= '2023-05-31':
+                $condition = '2023-05-01';
+                $condition2= '2023-05-31';
+                break;
+            case $hoje >= '2023-06-01' && $hoje <= '2023-06-30':
+                $condition = '2023-06-01';
+                $condition2= '2023-06-30';
+                break;
+            case $hoje >= '2023-07-01' && $hoje <= '2023-07-31':
+                $condition = '2023-07-01';
+                $condition2= '2023-07-31';
+                break;
+            case $hoje >= '2023-08-01' && $hoje <= '2023-08-31':
+                $condition = '2023-08-01';
+                $condition2= '2023-08-31';
+                break;
+            case $hoje >= '2023-09-01' && $hoje <= '2023-09-30':
+                $condition = '2023-09-01';
+                $condition2= '2023-09-30';
+                break;
+            case $hoje >= '2023-10-01' && $hoje <= '2023-10-31':
+                $condition = '2023-10-01';
+                $condition2= '2023-10-31';
+                break;
+            case $hoje >= '2023-11-01' && $hoje <= '2023-11-30':
+                $condition =  '2023-11-01';
+                $condition2= '2023-11-30';
+                break;
+            case $hoje >= '2023-12-01' && $hoje <= '2023-12-31':
+                $condition = '2023-12-01';
+                $condition2 = '2023-12-31';
+                break;
+        }
+
+        $sql = "SELECT * FROM sale WHERE sale_date >= '$condition' AND sale_date <= '$condition2'";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function selectAllProducts()
     {
         include_once 'Models/ProductModel.php';
@@ -185,6 +389,71 @@ class UserDAO
         include_once 'Models/ValeModel.php';
 
         $sql = "SELECT * FROM ticket";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectMonthTickets()
+    {
+        include_once 'Models/ValeModel.php';
+        date_default_timezone_set('America/Sao_Paulo');
+        $hoje = date('Y/m/d');
+        $hoje = str_replace('/', "-", $hoje);
+
+        switch($hoje){
+            case $hoje >= '2023-01-01' && $hoje <= '2023-01-31':
+                $condition = '2023-01-01';
+                $condition2= '2023-01-31';
+                break;
+            case $hoje >= '2023-02-01' && $hoje <= '2023-02-28':
+                $condition = '2023-02-01';
+                $condition2= '2023-02-28';
+                break;
+            case $hoje >= '2023-03-01' && $hoje <= '2023-03-31':
+                $condition = '2023-03-01';
+                $condition2= '2023-03-31';
+                break;
+            case $hoje >= '2023-04-01' && $hoje <= '2023-04-30':
+                $condition = '2023-04-01';
+                $condition2= '2023-04-30';
+            case $hoje >= '2023-05-01' && $hoje <= '2023-05-31':
+                $condition = '2023-05-01';
+                $condition2= '2023-05-31';
+                break;
+            case $hoje >= '2023-06-01' && $hoje <= '2023-06-30':
+                $condition = '2023-06-01';
+                $condition2= '2023-06-30';
+                break;
+            case $hoje >= '2023-07-01' && $hoje <= '2023-07-31':
+                $condition = '2023-07-01';
+                $condition2= '2023-07-31';
+                break;
+            case $hoje >= '2023-08-01' && $hoje <= '2023-08-31':
+                $condition = '2023-08-01';
+                $condition2= '2023-08-31';
+                break;
+            case $hoje >= '2023-09-01' && $hoje <= '2023-09-30':
+                $condition = '2023-09-01';
+                $condition2= '2023-09-30';
+                break;
+            case $hoje >= '2023-10-01' && $hoje <= '2023-10-31':
+                $condition = '2023-10-01';
+                $condition2= '2023-10-31';
+                break;
+            case $hoje >= '2023-11-01' && $hoje <= '2023-11-30':
+                $condition =  '2023-11-01';
+                $condition2= '2023-11-30';
+                break;
+            case $hoje >= '2023-12-01' && $hoje <= '2023-12-31':
+                $condition = '2023-12-01';
+                $condition2 = '2023-12-31';
+                break;
+        }
+
+        $sql = "SELECT * FROM ticket WHERE ticket_date >= '$condition' AND ticket_date <= '$condition2'";
 
         $stmt = $this->conexao->prepare($sql);
 

@@ -16,6 +16,17 @@ class SaleModel
         return ($obj) ? $obj : new SaleModel();
     }
 
+    public function getMonthSales()
+    {
+        include_once 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->selectMonthSales();
+
+        return ($obj) ? $obj : new SaleModel();
+    }
+
     public function saveSale($product_id, $sale_price, $client_id, $sale_date)
     {
         include 'DAO/UserDAO.php';

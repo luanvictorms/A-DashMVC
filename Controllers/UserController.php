@@ -128,12 +128,13 @@ class UserController
         $saleModel->totalSale = 0;
         $attendanceModel->attendanceProfit = 0;
         $costModel->totalCost = 0;
+        $valeModel->totalVale = 0;
         $saleProfit = 0;
         $valeCost = 0;
 
         //PEGANDO TODOS OS VALES
-        $valeModel->valeRows = $valeModel->getAllTickets();
-        if(!empty($valeModel->valeRows)){
+        $valeModel->valeRows = $valeModel->getMonthTickets();
+        if(is_array($valeModel->valeRows)){
             foreach($valeModel->valeRows as $vale){
                 $valeCost = $valeCost + $vale['ticket_value'];
             }
@@ -141,8 +142,8 @@ class UserController
         }
 
         //PEGANDO TODAS OS VENDAS
-        $saleModel->saleRows = $saleModel->getAllSales();
-        if(!empty($saleModel->saleRows)){
+        $saleModel->saleRows = $saleModel->getMonthSales();
+        if(is_array($saleModel->saleRows)){
             foreach($saleModel->saleRows as $sale){
                 $saleProfit = $saleProfit + $sale['sale_price'];
             }
@@ -155,8 +156,8 @@ class UserController
         $cost = 0;
 
         //PEGANDO TODOS OS SERVIÇOS
-        $attendanceModel->attendanceRows = $attendanceModel->getAllAttendanceCalls();
-        if(!empty($attendanceModel->attendanceRows)){
+        $attendanceModel->attendanceRows = $attendanceModel->getMonthAttendanceCalls();
+        if(is_array($attendanceModel->attendanceRows)){
             foreach($attendanceModel->attendanceRows as $register){
                 if(!empty($register['attendance_discount'])){
     
@@ -176,8 +177,8 @@ class UserController
         $cost = 0;
 
         //PEGANDO TODOS OS CUSTOS ADMINISTRATIVOS
-        $costModel->costRows = $costModel->getAllCosts();
-        if(!empty($costModel->costRows)){
+        $costModel->costRows = $costModel->getMonthCosts();
+        if(is_array($costModel->costRows)){
             foreach($costModel->costRows as $register){
                 $cost = $cost + $register['cost_value'];
                 $costModel->totalCost = $cost;

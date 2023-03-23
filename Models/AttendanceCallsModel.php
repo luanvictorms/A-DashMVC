@@ -27,6 +27,17 @@ class AttendanceCallsModel
         return ($obj) ? $obj : new AttendanceCallsModel();
     }
 
+    public function getMonthAttendanceCalls()
+    {
+        include_once 'DAO/UserDAO.php';
+
+        $dao = new UserDAO();
+
+        $obj = $dao->selectMonthAttendanceCalls();
+
+        return ($obj) ? $obj : new AttendanceCallsModel();
+    }
+
     public function saveAttendanceCall($atendente, $data, $pagamento, $servico, $cliente, $desconto)
     {
         include 'DAO/UserDAO.php';

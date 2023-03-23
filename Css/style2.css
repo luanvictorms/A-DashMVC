@@ -14,19 +14,20 @@
     --color-primary-variant: #111e88;
     
     
-    --color-background: #f6f6f9;
+    /*--color-background: #f6f6f9;
     --color-white: #fff;
     --color-dark: #363949;
     --color-dark-variant: #677483;
     --color-light: rgba(132, 139, 200, 0.18);
-    
+    */
 
-    /*--color-background: #181a1e;
+    --color-background: #181a1e;
     --color-white: #202528;
     --color-dark: #edeffd;
     --color-dark-variant: #a3bdcc;
     --color-light: rgba(0,0,0,0.4);
-    */
+    --jack: #F9A602;
+    
 
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -76,7 +77,7 @@ body{
     color: var(--color-dark);
 }
 
-.container{
+.container-main{
     display: grid;
     width: 96%;
     margin: 0 auto;
@@ -143,6 +144,10 @@ b{
 
 .danger{
     color: var(--color-danger);
+}
+
+.jack{
+    color: var(--jack);
 }
 
 .warning{
@@ -265,6 +270,10 @@ main .insights{
     gap: 1.6rem;
 }
 
+main .insights div button{
+    background-color: var(--color-white);
+}
+
 main .insights > div {
     background: var(--color-white);
     padding: var(--card-padding);
@@ -361,6 +370,10 @@ main .insights small {
 
 main .recent-orders{
     margin-top: 2rem;
+}
+
+#final{
+    margin-bottom: 20px;
 }
 
 main .recent-orders h2{
@@ -567,7 +580,7 @@ main .add-product div h3{
 /* media queries */
 
 @media screen and (max-width: 1200px) {
-    .container{
+    .container-main{
         width: 94%;
         grid-template-columns: 7rem auto 23rem;
     }
@@ -636,7 +649,7 @@ main .add-product div h3{
 
 /* MOBILE MEDIA QUERIE*/
 @media screen and (max-width: 768px){
-    .container{
+    .container-main{
         width: 100%;
         grid-template-columns: 1fr;
     }
@@ -828,3 +841,34 @@ main .add-product div h3{
     height: 60%;
     background-color: white;
 }
+
+dialog::backdrop{
+    background-color: rgb(0 0 0 / .5);
+}
+
+dialog{
+    border: none;
+    box-shadow: var(--box-shadow);
+    background: var(--color-background);
+    color: var(--color-dark);
+    border-radius: var(--border-radius-3);
+    height: 80vh;
+    width: 80vw;
+    margin-left: 10vw;
+    margin-top: 10vh;
+    animation: bounce 300ms ease-in-out;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes bounce {
+    from {
+      transform: translateX(-300px);
+    }
+    to {
+      transform: translateX(0px);
+    }
+  }
