@@ -264,8 +264,8 @@
                     foreach ($resultadoVendasProdutos as $vendas){
                         $html .= '<tr>';
                             $html .= '<td>'.$vendas['product_name'].'</td>';
-                            $html .= '<td>'.$vendas['sale_date'].'</td>';
                             $html .= '<td>'.$vendas['sale_price'].'</td>';
+                            $html .= '<td>'.$vendas['sale_date'].'</td>';
                         $html .= '</tr>';
                     }
                     $html .= '<tr>';
@@ -280,12 +280,13 @@
         $html .= '<br>';
 
         //PARTE DE CHAMADO DE ATENDIMENTOS
+        foreach($resultadoTrabalhadores as $trabalhador){
                 $html .= '<th>';
                     $html .= '<tr>';
-                        $html .= '<td colspan="4">Atendimentos</td>';
+                        $html .= '<td colspan="4">Atendimento funcionario -' .$trabalhador['worker_name']. '</td>';
                     $html .= '</tr>';
                 $html .= '</th>';
-
+    
                 $html .= '<tr>';
                     $html .= '<td><b>Serviço</b></td>';
                     $html .= '<td><b>Atendente</b></td>';
@@ -293,45 +294,84 @@
                     $html .= '<td><b>Tipo Pgto</b></td>';
                     $html .= '<td><b>Data</b></td>';
                     $html .= '<td><b>Valor</b></td>';
-                    $html .= '<td><b>Lucro Total</b></td>';
                 $html .= '</tr>';
-
+    
                 if(isset($resultadoChamadaAtendimento)){
                     foreach($resultadoChamadaAtendimento as $chamadoAtendimento){
-
-                        if(!empty($chamadoAtendimento['attendance_discount'])){
-                            $discount = $chamadoAtendimento['attendance_discount'] * $chamadoAtendimento['attendance_price'];
-                            $realPrice = $chamadoAtendimento['attendance_price'] - $discount;
-                            $gain = $gain + $realPrice;
-                        } else {
-                            $gain = $gain + $chamadoAtendimento['attendance_price'];
+                        if($chamadoAtendimento['worker_name'] == $trabalhador['worker_name']){
+                            $html .= '<tr>';
+                                $html .= '<td>'.$chamadoAtendimento['attendance_name'].'</td>';
+                                $html .= '<td>'.$chamadoAtendimento['worker_name'].'</td>';
+                                $html .= '<td>'.$chamadoAtendimento['client_name'].'</td>';
+                                $html .= '<td>'.$chamadoAtendimento['attendance_payment'].'</td>';
+                                $html .= '<td>'.$chamadoAtendimento['attendance_date'].'</td>';
+                                if(!empty($realPrice)){
+                                    $html .= '<td>'.$realPrice.'</td>';
+                                } else {
+                                    $html .= '<td>'.$chamadoAtendimento['attendance_price'].'</td>';
+                                }
+                            $html .= '</tr>';
+                            $realPrice = 0;
                         }
-
-                        $totalGain = $gain;
-                        $html .= '<tr>';
-                            $html .= '<td>'.$chamadoAtendimento['attendance_name'].'</td>';
-                            $html .= '<td>'.$chamadoAtendimento['worker_name'].'</td>';
-                            $html .= '<td>'.$chamadoAtendimento['client_name'].'</td>';
-                            $html .= '<td>'.$chamadoAtendimento['attendance_payment'].'</td>';
-                            $html .= '<td>'.$chamadoAtendimento['attendance_date'].'</td>';
-                            if(!empty($realPrice)){
-                                $html .= '<td>'.$realPrice.'</td>';
-                            } else {
-                                $html .= '<td>'.$chamadoAtendimento['attendance_price'].'</td>';
-                            }
-                        $html .= '</tr>';
-                        $realPrice = 0;
                     }
-                    $html .= '<tr>';
-                        $html .= '<td>'."".'</td>';
-                        $html .= '<td>'."".'</td>';
-                        $html .= '<td>'."".'</td>';
-                        $html .= '<td>'."".'</td>';
-                        $html .= '<td>'."".'</td>';
-                        $html .= '<td>'."".'</td>';
-                        $html .= '<td>'.'R$'.$totalGain.'</td>';
-                    $html .= '</tr>';
                 }
+            }
+
+        $html .= '<br>';
+        $html .= '<br>';
+
+        $html .= '<th>';
+            $html .= '<tr>';
+                $html .= '<td colspan="4">Atendimentos Mensais</td>';
+            $html .= '</tr>';
+        $html .= '</th>';
+
+        $html .= '<tr>';
+            $html .= '<td><b>Serviço</b></td>';
+            $html .= '<td><b>Atendente</b></td>';
+            $html .= '<td><b>Cliente</b></td>';
+            $html .= '<td><b>Tipo Pgto</b></td>';
+            $html .= '<td><b>Data</b></td>';
+            $html .= '<td><b>Valor</b></td>';
+            $html .= '<td><b>Lucro Total</b></td>';
+        $html .= '</tr>';
+
+        if(isset($resultadoChamadaAtendimento)){
+            foreach($resultadoChamadaAtendimento as $chamadoAtendimento){
+
+                if(!empty($chamadoAtendimento['attendance_discount'])){
+                    $discount = $chamadoAtendimento['attendance_discount'] * $chamadoAtendimento['attendance_price'];
+                    $realPrice = $chamadoAtendimento['attendance_price'] - $discount;
+                    $gain = $gain + $realPrice;
+                } else {
+                    $gain = $gain + $chamadoAtendimento['attendance_price'];
+                }
+
+                $totalGain = $gain;
+                $html .= '<tr>';
+                    $html .= '<td>'.$chamadoAtendimento['attendance_name'].'</td>';
+                    $html .= '<td>'.$chamadoAtendimento['worker_name'].'</td>';
+                    $html .= '<td>'.$chamadoAtendimento['client_name'].'</td>';
+                    $html .= '<td>'.$chamadoAtendimento['attendance_payment'].'</td>';
+                    $html .= '<td>'.$chamadoAtendimento['attendance_date'].'</td>';
+                    if(!empty($realPrice)){
+                        $html .= '<td>'.$realPrice.'</td>';
+                    } else {
+                        $html .= '<td>'.$chamadoAtendimento['attendance_price'].'</td>';
+                    }
+                $html .= '</tr>';
+                $realPrice = 0;
+            }
+            $html .= '<tr>';
+                $html .= '<td>'."".'</td>';
+                $html .= '<td>'."".'</td>';
+                $html .= '<td>'."".'</td>';
+                $html .= '<td>'."".'</td>';
+                $html .= '<td>'."".'</td>';
+                $html .= '<td>'."".'</td>';
+                $html .= '<td>'.'R$'.$totalGain.'</td>';
+            $html .= '</tr>';
+        }
                 
         $html .= '<br>';
         $html .= '<br>';
@@ -342,9 +382,13 @@
                 
                 $html .= '<th>';
                     $html .= '<tr>';
-                        $html .= '<td colspan="4">Lucro Atual (Atendimentos + Vendas - Custos Administrativos)</td>';
+                        $html .= '<td colspan="4">Lucro Atual (Atendimentos + Vendas - Vales - Custos Administrativos)</td>';
                     $html .= '</tr>';
                 $html .= '</th>';
+
+                $html .= '<tr>';
+                    $html .= '<td colspan="4">' . 'Lucro Atual' . '(' . ($totalGain) .' + '.($totalVenda).' - ' .($totalTicketCost).' - '. ($totalCost) .')</td>';
+                $html .= '</tr>';
 
                 $html .= '<tr>';
                     $html .= '<td><b>Lucro Total da Empresa</b></td>';
