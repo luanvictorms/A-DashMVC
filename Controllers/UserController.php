@@ -107,6 +107,7 @@ class UserController
         include_once 'Models/SaleModel.php';
         include_once 'Models/ProductModel.php';
         include_once 'Models/ValeModel.php';
+        include_once 'Models/UserModel.php';
 
         $servicesModel = new ServicesModel();
         $attendanceModel = new AttendanceCallsModel();
