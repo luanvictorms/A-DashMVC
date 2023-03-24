@@ -444,23 +444,7 @@
                                 <?php foreach($attendanceModel->attendanceRows as $row): ?>
                                     <?php if($row['worker_name'] == $obj['worker_name']):?>
                                         <?php if($row['attendance_date'] == $hoje): ?>
-                                            <?php if($row['worker_name'] != 'Diego Jack'):?>
-                                                <tr>
-                                                    <td><?php echo $row['attendance_name']; ?></td>
-                                                    <td><?php echo $row['worker_name']; ?></td>
-                                                    <td><?php echo $row['client_name']; ?></td>
-                                                    <td>
-                                                        <?php 
-                                                            $discount = $row['attendance_discount'] * $row['attendance_price']; 
-                                                            $realPrice = $row['attendance_price'] - $discount;
-                                                        ?>
-                                                        <?php echo "R$" . "{$realPrice}"; ?>
-                                                    </td>
-                                                    <td><?php echo $row['attendance_payment'];?></td>
-                                                    <td><?php echo $row['attendance_date']; ?></td>
-                                                    <td><a style="text-decoration: none; text-align:center" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>&mode=atendimento"><span class="material-icons-sharp">delete</span></a></td>
-                                                </tr>
-                                            <?php else: ?>
+                                            <?php if($row['worker_name'] == 'Diego Jack'):?>
                                                 <?php foreach($objServices as $service):?>
                                                     <?php if(in_array($service['service_name'] == 'Administrador',$obj)):?>
                                                         <tr>
@@ -480,6 +464,22 @@
                                                         </tr>
                                                     <?php endif; ?>
                                                 <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td><?php echo $row['attendance_name']; ?></td>
+                                                    <td><?php echo $row['worker_name']; ?></td>
+                                                    <td><?php echo $row['client_name']; ?></td>
+                                                    <td>
+                                                        <?php 
+                                                            $discount = $row['attendance_discount'] * $row['attendance_price']; 
+                                                            $realPrice = $row['attendance_price'] - $discount;
+                                                        ?>
+                                                        <?php echo "R$" . "{$realPrice}"; ?>
+                                                    </td>
+                                                    <td><?php echo $row['attendance_payment'];?></td>
+                                                    <td><?php echo $row['attendance_date']; ?></td>
+                                                    <td><a style="text-decoration: none; text-align:center" href="/usuario/atendimento/delete?id=<?= $row['attendance_calls_id']?>&mode=atendimento"><span class="material-icons-sharp">delete</span></a></td>
+                                                </tr>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
